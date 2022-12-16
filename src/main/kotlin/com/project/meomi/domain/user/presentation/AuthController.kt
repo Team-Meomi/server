@@ -7,11 +7,11 @@ import com.project.meomi.domain.user.service.ReissueTokenService
 import com.project.meomi.domain.user.service.SignInService
 import com.project.meomi.domain.user.service.SignUpService
 import com.project.meomi.domain.user.utils.UserConverter
-import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @Controller
 @RequestMapping("api/v1/auth")

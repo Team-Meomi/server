@@ -2,7 +2,6 @@ package com.project.meomi.domain.user.domain
 
 import com.project.meomi.domain.user.presentation.data.type.Gender
 import com.project.meomi.domain.user.presentation.data.type.Role
-import org.hibernate.mapping.Join
 import javax.persistence.*
 
 @Entity
