@@ -56,12 +56,6 @@ dependencies {
 	// redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-	// aws
-	implementation ("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
-
-	// maria db
-	implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
-
 }
 
 tasks.withType<KotlinCompile> {
