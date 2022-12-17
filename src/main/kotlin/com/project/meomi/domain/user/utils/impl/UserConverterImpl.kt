@@ -20,7 +20,7 @@ class UserConverterImpl : UserConverter {
         UserDto(-1, request.email, request.password, request.name, request.stuNum)
 
     override fun toDto(request: SignInRequest): UserDto =
-        UserDto(-1, request.email, request.password, "", "")
+        UserDto(-1, request.email, request.password, "", -1)
 
     override fun toDto(refreshToken: String): ReissueTokenDto =
         ReissueTokenDto(refreshToken)

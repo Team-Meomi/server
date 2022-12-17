@@ -12,7 +12,7 @@ class User(
     val email: String,
     val password: String,
     val name: String,
-    val stuNum: String,
+    val stuNum: Int,
     @Enumerated(EnumType.STRING)
     val gender: Gender,
     @Enumerated(EnumType.STRING)

@@ -9,12 +9,11 @@ import com.project.meomi.domain.user.service.SignUpService
 import com.project.meomi.domain.user.utils.UserConverter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
-@Controller
-@RequestMapping("api/v1/auth")
+@RestController
+@RequestMapping("api/v1/user/auth")
 class AuthController(
     private val userConverter: UserConverter,
     private val signUpService: SignUpService,
@@ -23,11 +22,10 @@ class AuthController(
 ) {
 
     @PostMapping("/signup")
-    fun signup(@RequestBody @Valid request: SignUpRequest): ResponseEntity<Void> {
+    fun signup(@RequestBody @Valid request: SignUpRequest): ResponseEntity<Void> =
         userConverter.toDto(request)
             .let { signUpService.signUp(it) }
-            .let { return ResponseEntity.status(HttpStatus.CREATED).build() }
-    }
+            .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 
     @PostMapping("/signin")
     fun signin(@RequestBody @Valid request: SignInRequest): ResponseEntity<TokenResponse> =

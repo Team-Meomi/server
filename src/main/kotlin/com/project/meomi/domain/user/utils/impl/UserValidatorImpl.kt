@@ -2,6 +2,7 @@ package com.project.meomi.domain.user.utils.impl
 
 import com.project.meomi.domain.user.domain.repository.UserRepository
 import com.project.meomi.domain.user.exception.DuplicateEmailException
+import com.project.meomi.domain.user.exception.DuplicateStuNumException
 import com.project.meomi.domain.user.exception.PasswordNotCorrectException
 import com.project.meomi.domain.user.exception.UserNotFoundException
 import com.project.meomi.domain.user.presentation.data.dto.UserDto
@@ -24,9 +25,11 @@ class UserValidatorImpl(
     }
 
     private fun validateSignUp(dto: UserDto) {
-        if(userRepository.existsUserByEmail(dto.email)) {
+        if (userRepository.existsUserByEmail(dto.email)) {
             throw DuplicateEmailException()
         }
+
+        validateStuNum(dto.stuNum)
     }
 
     private fun validateSignIn(dto: UserDto) {
@@ -37,6 +40,12 @@ class UserValidatorImpl(
                 if(it) return
                 else throw PasswordNotCorrectException()
             }
+    }
+
+    private fun validateStuNum(stuNum: Int) {
+        if (userRepository.existsUserByStuNum(stuNum)){
+            throw DuplicateStuNumException()
+        }
     }
 
 }
