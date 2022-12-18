@@ -7,6 +7,7 @@ enum class ErrorCode(
 
     // USER
     DUPLICATE_EMAIL("중복된 이메일 입니다.", 409),
+    DUPLICATE_STUNUM("중복된 학번 입니다.", 409),
     USER_NOT_FOUND("사용자를 찾을 수 없습니다.", 404),
     PASSWORD_NOT_CORRECT("비밀번호가 일치하지 않습니다.", 400),
 
@@ -19,6 +20,7 @@ enum class ErrorCode(
     // CONFERENCE
     CONFERENCE_COUNT_OVER("컨퍼런스 최대 수용 인원을 초과했습니다.", 400),
     CONFERENCE_NOT_FOUND("컨퍼런스를 찾을 수 없습니다.", 404),
+    DUPLICATE_CONFERENCE_APPLICANT("중복된 컨퍼런스 신청자 입니다.", 409),
 
     // SERVER
     INTERVAL_SERVER_ERROR("서버 오류 입니다.", 500)
