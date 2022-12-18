@@ -90,6 +90,7 @@ class ConferenceConverterImpl : ConferenceConverter {
             date = dto.date,
             startTime = dto.startTime,
             endTime = dto.endTime,
+            isMine = dto.isMine,
             user = ConferenceResponse.UserResponse(
                 dto.user.id, dto.user.name, dto.user.gender
             )
