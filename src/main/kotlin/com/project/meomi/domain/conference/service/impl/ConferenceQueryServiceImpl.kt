@@ -23,7 +23,7 @@ class ConferenceQueryServiceImpl(
     override fun findConferenceById(dto: ConferenceDto): ConferenceQueryDto =
         conferenceRepository.findConferenceById(dto.id)
             .let { it ?: throw ConferenceNotFoundException() }
-            .let { conferenceConverter.toQueryDto(it, isConferenceMine(it.user.email)) }
+            .let { conferenceConverter.toQueryDto(it, isConferenceMine(it.user.id)) }
 
     override fun findConferenceInfo(dto: ConferenceDto): ConferenceInfoDto {
         val conference = conferenceRepository.findConferenceById(dto.id)
@@ -48,7 +48,7 @@ class ConferenceQueryServiceImpl(
         )
     }
 
-    private fun isConferenceMine(email: String): Boolean =
-        userUtil.currentUser().email == email
+    private fun isConferenceMine(id: Long): Boolean =
+        userUtil.currentUser().id == id
 
 }
