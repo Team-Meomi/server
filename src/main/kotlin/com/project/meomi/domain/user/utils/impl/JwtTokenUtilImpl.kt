@@ -6,6 +6,7 @@ import com.project.meomi.domain.user.presentation.data.dto.TokenDto
 import com.project.meomi.domain.user.utils.JwtTokenUtil
 import com.project.meomi.global.security.jwt.JwtTokenProvider
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class JwtTokenUtilImpl(
@@ -13,12 +14,13 @@ class JwtTokenUtilImpl(
     private val userRepository: UserRepository
 ): JwtTokenUtil {
 
+    @Transactional(rollbackFor = [Exception::class])
     override fun generateJwtToken(email: String): TokenDto {
         val user = userRepository.findUserByEmail(email)
             ?: throw UserNotFoundException()
         val accessToken = jwtTokenProvider.generateAccessToken(email)
         val refreshToken = jwtTokenProvider.generateRefreshToken(email)
-        user.refreshToken = refreshToken
+        user.updateRefreshToken(refreshToken)
         return TokenDto(accessToken, refreshToken, jwtTokenProvider.getExpiredAt())
     }
 

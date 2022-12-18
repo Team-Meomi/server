@@ -68,9 +68,9 @@ class JwtTokenProvider(
     fun generateRefreshToken(email: String): String =
         doGenerateToken(email = email, tokenType = TokenType.REFRESH_TOKEN, expireTime = refreshTokenExpireTime)
 
-    fun authentication(token: String): Authentication =
-        getUserEmail(token)
-            .let { authDetailsService.loadUserByUsername(it) }
-            .let { UsernamePasswordAuthenticationToken(it, "", it.authorities) }
+    fun authentication(token: String): Authentication {
+        val userDetail = authDetailsService.loadUserByUsername(getUserEmail(token))
+        return UsernamePasswordAuthenticationToken(userDetail, "", null)
+    }
 
 }

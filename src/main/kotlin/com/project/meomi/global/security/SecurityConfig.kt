@@ -34,9 +34,16 @@ class SecurityConfig(
 
         http
             .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-            .antMatchers(HttpMethod.PATCH, "/api/v1/auth/**").permitAll()
-            .anyRequest().authenticated()
+            .antMatchers(HttpMethod.POST, "/api/v1/user/auth/**").permitAll()
+            .antMatchers(HttpMethod.PATCH, "/api/v1/user/auth/**").permitAll()
+
+            .antMatchers(HttpMethod.POST, "/api/v1/user/conference/**").authenticated()
+            .antMatchers(HttpMethod.GET, "/api/v1/user/conference/**").authenticated()
+            .antMatchers(HttpMethod.DELETE, "/api/v1/user/conference/**").authenticated()
+            .antMatchers(HttpMethod.PATCH, "/api/v1/user/conference/**").authenticated()
+
+            .antMatchers("/api/v1/user/**").hasRole("USER")
+            .antMatchers("api/vi/admin/**").hasRole("ADMIN")
 
         http
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
