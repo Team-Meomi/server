@@ -11,6 +11,7 @@ data class ConferenceResponse(
     val date: LocalDate,
     val startTime: Int,
     val endTime: Int,
+    val isMine: Boolean,
     val user: UserResponse
 ) {
     data class UserResponse(

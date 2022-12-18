@@ -2,7 +2,7 @@ package com.project.meomi.domain.conference.presentation.data.dto
 
 import com.project.meomi.domain.user.presentation.data.type.Gender
 
-class ConferencePeopleDto(
+data class ConferencePeopleDto(
     val list: List<UserResponse>
 ) {
     data class UserResponse(
