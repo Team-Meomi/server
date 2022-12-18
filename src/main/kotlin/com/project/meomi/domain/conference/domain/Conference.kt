@@ -26,12 +26,13 @@ class Conference(
     @JoinColumn(name = "user_id")
     val user: User
 ) {
-    fun updateConference(dto: ConferenceDto) {
+    fun updateConference(dto: ConferenceDto, count: Int) {
         this.title = dto.title
         this.content = dto.content
         this.date = dto.date
         this.startTime = dto.startTime
         this.endTime = dto.endTime
+        this.count = count
     }
     fun addCount() {
         this.count += 1
