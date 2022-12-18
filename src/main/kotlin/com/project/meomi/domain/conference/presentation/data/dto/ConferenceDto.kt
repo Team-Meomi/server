@@ -6,7 +6,8 @@ data class ConferenceDto(
     val id: Long,
     val title: String,
     val content: String,
+    val category: String,
     val date: LocalDate,
     val startTime: Int,
-    val endTime: Int
+    val endTime: Int,
 )
