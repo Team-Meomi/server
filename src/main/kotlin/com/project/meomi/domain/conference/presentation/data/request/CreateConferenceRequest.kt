@@ -1,17 +1,19 @@
 package com.project.meomi.domain.conference.presentation.data.request
 
-import jakarta.validation.constraints.NotBlank
 import java.time.LocalDate
+import javax.validation.constraints.NotNull
 
 data class CreateConferenceRequest(
-    @field:NotBlank
+    @field:NotNull
     val title: String,
-    @field:NotBlank
+    @field:NotNull
     val content: String,
-    @field:NotBlank
+    @field:NotNull
+    val category: String,
+    @field:NotNull
     val date: LocalDate,
-    @field:NotBlank
+    @field:NotNull
     val startTime: Int,
-    @field:NotBlank
+    @field:NotNull
     val endTime: Int
 )
