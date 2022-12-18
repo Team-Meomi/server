@@ -1,12 +1,11 @@
 package com.project.meomi.domain.conference.service.impl
 
 import com.project.meomi.domain.conference.domain.Conference
-import com.project.meomi.domain.conference.domain.ConferenceCount
-import com.project.meomi.domain.conference.domain.repository.ConferenceCountRepository
 import com.project.meomi.domain.conference.domain.repository.ConferencePeopleRepository
 import com.project.meomi.domain.conference.domain.repository.ConferenceRepository
 import com.project.meomi.domain.conference.exception.ConferenceCountOverException
 import com.project.meomi.domain.conference.exception.ConferenceNotFoundException
+import com.project.meomi.domain.conference.exception.DuplicateConferenceApplicantException
 import com.project.meomi.domain.conference.presentation.data.dto.ConferenceDto
 import com.project.meomi.domain.conference.service.ConferenceService
 import com.project.meomi.domain.conference.utils.ConferenceConverter
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ConferenceServiceImpl(
     private val conferenceRepository: ConferenceRepository,
-    private val conferenceCountRepository: ConferenceCountRepository,
     private val conferencePeopleRepository: ConferencePeopleRepository,
     private val conferenceConverter: ConferenceConverter,
     private val userUtil: UserUtil
@@ -29,21 +27,27 @@ class ConferenceServiceImpl(
             .let { conferenceRepository.save(it) }
     }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class])
     override fun joinConference(dto: ConferenceDto) {
         val conference = conferenceRepository.findConferenceById(dto.id)
             ?: throw ConferenceNotFoundException()
-        val conferenceCount = findConferenceCount(dto.id)
-        isSmallerThanForty(conferenceCount.count)
-        conferenceCount.addCount()
+        isSmallerThanForty(conference.count)
+
+        if(conferencePeopleRepository.existsConferencePeopleByUserId(userUtil.currentUser().id)) {
+            throw DuplicateConferenceApplicantException()
+        }
+
         conferenceConverter.toEntity(conference, userUtil.currentUser())
             .let { conferencePeopleRepository.save(it) }
+
+        conference.addCount()
     }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class])
     override fun cancelConference(dto: ConferenceDto) {
-        val conferenceCount = findConferenceCount(dto.id)
-        conferenceCount.removeCount()
+        val conference = conferenceRepository.findConferenceById(dto.id)
+            ?: throw ConferenceNotFoundException()
+        conference.removeCount()
         conferencePeopleRepository.deleteConferencePeopleByUserId(userUtil.currentUser().id)
     }
 
@@ -56,11 +60,7 @@ class ConferenceServiceImpl(
             .let { conferenceRepository.deleteById(it.id) }
     }
 
-    // JPA 비관적 Lock이 적용된 카운트를 조회하는 메서드
-    private fun findConferenceCount(id: Long): ConferenceCount =
-        conferenceCountRepository.findConferenceCountByConferenceId(id)
-
-    private fun isSmallerThanForty(count: Long): Boolean {
+    private fun isSmallerThanForty(count: Int): Boolean {
         if (count >= 40) throw ConferenceCountOverException()
         return true
     }
