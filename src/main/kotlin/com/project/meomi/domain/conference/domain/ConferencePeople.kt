@@ -16,6 +16,6 @@ class ConferencePeople(
     val conference: Conference,
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn(name = "user_id")
     val user: User
 )

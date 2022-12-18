@@ -33,7 +33,7 @@ class ConferenceServiceImpl(
             ?: throw ConferenceNotFoundException()
         isSmallerThanForty(conference.count)
 
-        if(conferencePeopleRepository.existsConferencePeopleByUserId(userUtil.currentUser().id)) {
+        if(conferencePeopleRepository.existsConferencePeopleByConferenceIdAndConferenceUserId(conference.id, userUtil.currentUser().id)) {
             throw DuplicateConferenceApplicantException()
         }
 
@@ -51,10 +51,13 @@ class ConferenceServiceImpl(
         conferencePeopleRepository.deleteConferencePeopleByUserId(userUtil.currentUser().id)
     }
 
+    @Transactional(rollbackFor = [Exception::class])
     override fun updateConference(dto: ConferenceDto) {
-        validateConference(dto.id).updateConference(dto)
+        validateConference(dto.id)
+            .let { it.updateConference(dto, it.count) }
     }
 
+    @Transactional(rollbackFor = [Exception::class])
     override fun deleteConference(dto: ConferenceDto) {
         validateConference(dto.id)
             .let { conferenceRepository.deleteById(it.id) }

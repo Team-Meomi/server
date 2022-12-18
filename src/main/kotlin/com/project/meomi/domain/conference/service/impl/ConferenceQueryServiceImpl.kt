@@ -28,7 +28,7 @@ class ConferenceQueryServiceImpl(
     override fun findConferenceInfo(dto: ConferenceDto): ConferenceInfoDto {
         val conference = conferenceRepository.findConferenceById(dto.id)
             ?: throw ConferenceNotFoundException()
-        val isStatus = conferencePeopleRepository.existsConferencePeopleByUserId(userUtil.currentUser().id)
+        val isStatus = conferencePeopleRepository.existsConferencePeopleByConferenceIdAndConferenceUserId(conference.id, userUtil.currentUser().id)
         return ConferenceInfoDto(isStatus, conference.count)
     }
 
