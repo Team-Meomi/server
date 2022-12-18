@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("mysql:mysql-connector-java")
+	implementation("org.mariadb.jdbc:mariadb-java-client:3.0.6")
 
 	// validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
