@@ -29,10 +29,10 @@ class ConferenceController(
 
 
     @PatchMapping("{id}")
-    fun updateConference(@PathVariable id: Long, @RequestBody @Valid request: UpdateConferenceRequest): ResponseEntity<Void> =
+    fun updateConference(@PathVariable id: Long, @RequestBody request: UpdateConferenceRequest): ResponseEntity<Void> =
         conferenceConverter.toDto(request, id)
             .let { conferenceService.updateConference(it) }
-            .let { return ResponseEntity.ok().build() }
+            .let { ResponseEntity.ok().build() }
 
     @DeleteMapping("{id}")
     fun deleteConference(@PathVariable id: Long): ResponseEntity<Void> =
