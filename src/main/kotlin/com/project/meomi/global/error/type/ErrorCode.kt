@@ -17,10 +17,18 @@ enum class ErrorCode(
     EXPIRED_TOKEN("만료된 토큰 입니다.", 403),
     REFRESH_TOKEN_EXPIRED("만료된 RefreshToken 입니다.", 403),
 
+
     // CONFERENCE
     CONFERENCE_COUNT_OVER("컨퍼런스 최대 수용 인원을 초과했습니다.", 400),
     CONFERENCE_NOT_FOUND("컨퍼런스를 찾을 수 없습니다.", 404),
     DUPLICATE_CONFERENCE_APPLICANT("중복된 컨퍼런스 신청자 입니다.", 409),
+
+
+    // STUDY
+    STUDY_NOT_FOUNT("스터디를 찾을 수 없습니다.", 404),
+    STUDY_COUNT_OVER("스터디 최대 수용 인원을 초과했습니다.", 400),
+    DUPLICATE_STUDY_APPLICANT("중복된 스터디 신청자 입니다.", 409),
+
 
     // SERVER
     INTERVAL_SERVER_ERROR("서버 오류 입니다.", 500)

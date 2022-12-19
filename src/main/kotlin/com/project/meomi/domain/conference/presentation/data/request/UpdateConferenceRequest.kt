@@ -2,6 +2,7 @@ package com.project.meomi.domain.conference.presentation.data.request
 
 import java.time.LocalDate
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 data class UpdateConferenceRequest(
     @field:NotBlank
@@ -15,5 +16,7 @@ data class UpdateConferenceRequest(
     @field:NotBlank
     val startTime: Int,
     @field:NotBlank
-    val endTime: Int
+    val endTime: Int,
+    @field:NotNull
+    val maxCount: Int
 )
