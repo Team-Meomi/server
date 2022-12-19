@@ -2,14 +2,13 @@ package com.project.meomi.domain.conference.utils.impl
 
 import com.project.meomi.domain.conference.domain.Conference
 import com.project.meomi.domain.conference.domain.ConferencePeople
-import com.project.meomi.domain.conference.presentation.data.dto.ConferenceDto
-import com.project.meomi.domain.conference.presentation.data.dto.ConferenceInfoDto
-import com.project.meomi.domain.conference.presentation.data.dto.ConferencePeopleDto
-import com.project.meomi.domain.conference.presentation.data.dto.ConferenceQueryDto
+import com.project.meomi.domain.conference.presentation.data.dto.*
+import com.project.meomi.domain.conference.presentation.data.request.ConferenceRentRequest
 import com.project.meomi.domain.conference.presentation.data.request.CreateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.request.UpdateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceInfoResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferencePeopleResponse
+import com.project.meomi.domain.conference.presentation.data.response.ConferenceRentResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceResponse
 import com.project.meomi.domain.conference.utils.ConferenceConverter
 import com.project.meomi.domain.user.domain.User
@@ -36,6 +35,17 @@ class ConferenceConverterImpl : ConferenceConverter {
             title = request.title,
             content = request.content,
             category = request.category,
+            date = request.date,
+            startTime = request.startTime,
+            endTime = request.endTime,
+        )
+
+    override fun toDto(request: ConferenceRentRequest): ConferenceDto =
+        ConferenceDto(
+            id = -1,
+            title = "",
+            content = "",
+            category = "",
             date = request.date,
             startTime = request.startTime,
             endTime = request.endTime,
@@ -101,5 +111,8 @@ class ConferenceConverterImpl : ConferenceConverter {
 
     override fun toResponse(dto: ConferencePeopleDto): ConferencePeopleResponse =
         ConferencePeopleResponse(dto.list)
+
+    override fun toResponse(dto: ConferenceRentDto): ConferenceRentResponse =
+        ConferenceRentResponse(dto.isStatus)
 
 }

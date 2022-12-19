@@ -1,9 +1,11 @@
 package com.project.meomi.domain.conference.presentation
 
+import com.project.meomi.domain.conference.presentation.data.request.ConferenceRentRequest
 import com.project.meomi.domain.conference.presentation.data.request.CreateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.request.UpdateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceInfoResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferencePeopleResponse
+import com.project.meomi.domain.conference.presentation.data.response.ConferenceRentResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceResponse
 import com.project.meomi.domain.conference.service.ConferenceQueryService
 import com.project.meomi.domain.conference.service.ConferenceService
@@ -27,7 +29,6 @@ class ConferenceController(
             .let { conferenceService.createConference(it) }
             .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 
-
     @PatchMapping("{id}")
     fun updateConference(@PathVariable id: Long, @RequestBody request: UpdateConferenceRequest): ResponseEntity<Void> =
         conferenceConverter.toDto(request, id)
@@ -39,6 +40,13 @@ class ConferenceController(
         conferenceConverter.toDto(id)
             .let { conferenceService.deleteConference(it) }
             .let { ResponseEntity.ok().build() }
+
+    @PostMapping("check")
+    fun checkConferenceIsRent(@RequestBody request: ConferenceRentRequest): ResponseEntity<ConferenceRentResponse> =
+        conferenceConverter.toDto(request)
+            .let { conferenceQueryService.checkConferenceIsRent(it) }
+            .let { conferenceConverter.toResponse(it) }
+            .let { ResponseEntity.ok(it) }
 
     @GetMapping("{id}")
     fun findConferenceById(@PathVariable id: Long): ResponseEntity<ConferenceResponse> =
