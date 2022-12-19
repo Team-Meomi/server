@@ -2,13 +2,12 @@ package com.project.meomi.domain.conference.utils.impl
 
 import com.project.meomi.domain.conference.domain.Conference
 import com.project.meomi.domain.conference.domain.ConferencePeople
-import com.project.meomi.domain.conference.presentation.data.dto.*
+import com.project.meomi.domain.conference.presentation.data.dto.ConferenceDto
+import com.project.meomi.domain.conference.presentation.data.dto.ConferenceQueryDto
 import com.project.meomi.domain.conference.presentation.data.request.ConferenceRentRequest
 import com.project.meomi.domain.conference.presentation.data.request.CreateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.request.UpdateConferenceRequest
-import com.project.meomi.domain.conference.presentation.data.response.ConferenceInfoResponse
-import com.project.meomi.domain.conference.presentation.data.response.ConferencePeopleResponse
-import com.project.meomi.domain.conference.presentation.data.response.ConferenceRentResponse
+import com.project.meomi.domain.conference.presentation.data.response.CheckConferenceResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceResponse
 import com.project.meomi.domain.conference.utils.ConferenceConverter
 import com.project.meomi.domain.user.domain.User
@@ -27,6 +26,7 @@ class ConferenceConverterImpl : ConferenceConverter {
             date = request.date,
             startTime = request.startTime,
             endTime = request.endTime,
+            maxCount = request.maxCount
         )
 
     override fun toDto(request: UpdateConferenceRequest, id: Long): ConferenceDto =
@@ -38,6 +38,7 @@ class ConferenceConverterImpl : ConferenceConverter {
             date = request.date,
             startTime = request.startTime,
             endTime = request.endTime,
+            maxCount = request.maxCount
         )
 
     override fun toDto(request: ConferenceRentRequest): ConferenceDto =
@@ -49,6 +50,7 @@ class ConferenceConverterImpl : ConferenceConverter {
             date = request.date,
             startTime = request.startTime,
             endTime = request.endTime,
+            maxCount = -1
         )
 
     override fun toDto(id: Long): ConferenceDto =
@@ -60,6 +62,7 @@ class ConferenceConverterImpl : ConferenceConverter {
             date = LocalDate.now(),
             startTime = -1,
             endTime = -1,
+            maxCount = -1
         )
 
     override fun toEntity(dto: ConferenceDto, user: User): Conference =
@@ -72,13 +75,19 @@ class ConferenceConverterImpl : ConferenceConverter {
             startTime = dto.startTime,
             endTime = dto.endTime,
             user = user,
-            count = 0
+            count = 0,
+            maxCount = dto.maxCount
         )
 
     override fun toEntity(conference: Conference, user: User): ConferencePeople =
         ConferencePeople(id = -1, conference = conference, user = user)
 
-    override fun toQueryDto(conference: Conference, isMine: Boolean): ConferenceQueryDto =
+    override fun toQueryDto(
+        conference: Conference,
+        isMine: Boolean,
+        isStatus: Boolean,
+        conferencePeople: List<ConferencePeople>
+    ): ConferenceQueryDto =
         ConferenceQueryDto(
             id = conference.id,
             title = conference.title,
@@ -88,7 +97,22 @@ class ConferenceConverterImpl : ConferenceConverter {
             startTime = conference.startTime,
             endTime = conference.endTime,
             isMine = isMine,
-            user = conference.user
+            isStatus = isStatus,
+            writer = ConferenceQueryDto.UserResponse(
+                conference.user.id,
+                conference.user.stuNum,
+                conference.user.name,
+                conference.user.gender
+            ),
+            count = ConferenceQueryDto.CountResponse(conference.count, conference.maxCount),
+            list = conferencePeople.map {
+                ConferenceQueryDto.UserResponse(
+                    it.user.id,
+                    it.user.stuNum,
+                    it.user.name,
+                    it.user.gender
+                )
+            }
         )
 
     override fun toResponse(dto: ConferenceQueryDto): ConferenceResponse =
@@ -101,18 +125,13 @@ class ConferenceConverterImpl : ConferenceConverter {
             startTime = dto.startTime,
             endTime = dto.endTime,
             isMine = dto.isMine,
-            user = ConferenceResponse.UserResponse(
-                dto.user.id, dto.user.name, dto.user.gender
-            )
+            isStatus = dto.isStatus,
+            writer = dto.writer,
+            count = dto.count,
+            list = dto.list
         )
 
-    override fun toResponse(dto: ConferenceInfoDto): ConferenceInfoResponse =
-        ConferenceInfoResponse(dto.isStatus, dto.count)
-
-    override fun toResponse(dto: ConferencePeopleDto): ConferencePeopleResponse =
-        ConferencePeopleResponse(dto.list)
-
-    override fun toResponse(dto: ConferenceRentDto): ConferenceRentResponse =
-        ConferenceRentResponse(dto.isStatus)
+    override fun toResponse(isStatus: Boolean): CheckConferenceResponse =
+        CheckConferenceResponse(isStatus)
 
 }

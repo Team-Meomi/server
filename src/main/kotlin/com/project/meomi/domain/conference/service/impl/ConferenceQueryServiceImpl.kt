@@ -19,41 +19,21 @@ class ConferenceQueryServiceImpl(
 ) : ConferenceQueryService {
 
     @Transactional(readOnly = true, rollbackFor = [Exception::class])
-    override fun checkConferenceIsRent(dto: ConferenceDto): ConferenceRentDto =
-        ConferenceRentDto(!conferenceRepository.existsConferenceByDateAndStartTimeAndEndTime(dto.date, dto.startTime, dto.endTime))
+    override fun checkConferenceIsRent(dto: ConferenceDto): Boolean =
+        !conferenceRepository.existsConferenceByDateAndStartTimeAndEndTime(dto.date, dto.startTime, dto.endTime)
 
     @Transactional(readOnly = true, rollbackFor = [Exception::class])
-    override fun findConferenceById(dto: ConferenceDto): ConferenceQueryDto =
-        conferenceRepository.findConferenceById(dto.id)
-            .let { it ?: throw ConferenceNotFoundException() }
-            .let { conferenceConverter.toQueryDto(it, isConferenceMine(it.user.id)) }
-
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
-    override fun findConferenceInfo(dto: ConferenceDto): ConferenceInfoDto {
+    override fun findConferenceById(dto: ConferenceDto): ConferenceQueryDto {
         val conference = conferenceRepository.findConferenceById(dto.id)
             ?: throw ConferenceNotFoundException()
+
         val isStatus = conferencePeopleRepository.existsConferencePeopleByConferenceIdAndConferenceUserId(conference.id, userUtil.currentUser().id)
-        return ConferenceInfoDto(isStatus, conference.count)
-    }
-
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
-    override fun findConferencePeople(dto: ConferenceDto): ConferencePeopleDto {
-        val conference = conferenceRepository.findConferenceById(dto.id)
-            ?: throw ConferenceNotFoundException()
         val conferencePeople = conferencePeopleRepository.findConferencePeopleByConferenceId(conference.id)
-        return ConferencePeopleDto(
-            conferencePeople.map {
-                ConferencePeopleDto.UserResponse(
-                    it.user.id,
-                    it.user.stuNum,
-                    it.user.name,
-                    it.user.gender
-                )
-            }
-        )
+
+        return conferenceConverter.toQueryDto(conference, isConferenceMine(conference.user.id), isStatus, conferencePeople)
     }
 
-    private fun isConferenceMine(id: Long): Boolean =
-        userUtil.currentUser().id == id
+    private fun isConferenceMine(conferenceUserId: Long): Boolean =
+        userUtil.currentUser().id == conferenceUserId
 
 }

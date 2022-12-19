@@ -3,9 +3,7 @@ package com.project.meomi.domain.conference.presentation
 import com.project.meomi.domain.conference.presentation.data.request.ConferenceRentRequest
 import com.project.meomi.domain.conference.presentation.data.request.CreateConferenceRequest
 import com.project.meomi.domain.conference.presentation.data.request.UpdateConferenceRequest
-import com.project.meomi.domain.conference.presentation.data.response.ConferenceInfoResponse
-import com.project.meomi.domain.conference.presentation.data.response.ConferencePeopleResponse
-import com.project.meomi.domain.conference.presentation.data.response.ConferenceRentResponse
+import com.project.meomi.domain.conference.presentation.data.response.CheckConferenceResponse
 import com.project.meomi.domain.conference.presentation.data.response.ConferenceResponse
 import com.project.meomi.domain.conference.service.ConferenceQueryService
 import com.project.meomi.domain.conference.service.ConferenceService
@@ -30,7 +28,10 @@ class ConferenceController(
             .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 
     @PatchMapping("{id}")
-    fun updateConference(@PathVariable id: Long, @RequestBody request: UpdateConferenceRequest): ResponseEntity<Void> =
+    fun updateConference(
+        @PathVariable id: Long,
+        @RequestBody @Valid request: UpdateConferenceRequest
+    ): ResponseEntity<Void> =
         conferenceConverter.toDto(request, id)
             .let { conferenceService.updateConference(it) }
             .let { ResponseEntity.ok().build() }
@@ -42,7 +43,7 @@ class ConferenceController(
             .let { ResponseEntity.ok().build() }
 
     @PostMapping("check")
-    fun checkConferenceIsRent(@RequestBody request: ConferenceRentRequest): ResponseEntity<ConferenceRentResponse> =
+    fun checkAudiovisualRoomIsRent(@RequestBody request: ConferenceRentRequest): ResponseEntity<CheckConferenceResponse> =
         conferenceConverter.toDto(request)
             .let { conferenceQueryService.checkConferenceIsRent(it) }
             .let { conferenceConverter.toResponse(it) }
@@ -50,10 +51,8 @@ class ConferenceController(
 
     @GetMapping("{id}")
     fun findConferenceById(@PathVariable id: Long): ResponseEntity<ConferenceResponse> =
-        conferenceConverter.toDto(id)
-            .let { conferenceQueryService.findConferenceById(it) }
-            .let { conferenceConverter.toResponse(it) }
-            .let { ResponseEntity.ok(it) }
+        conferenceConverter.toDto(id).let { conferenceQueryService.findConferenceById(it) }
+            .let { conferenceConverter.toResponse(it) }.let { ResponseEntity.ok(it) }
 
     @PostMapping("{id}")
     fun joinConference(@PathVariable id: Long): ResponseEntity<Void> =
@@ -66,19 +65,5 @@ class ConferenceController(
         conferenceConverter.toDto(id)
             .let { conferenceService.cancelConference(it) }
             .let { ResponseEntity.ok().build() }
-
-    @GetMapping("info/{id}")
-    fun findConferenceInfo(@PathVariable id: Long): ResponseEntity<ConferenceInfoResponse> =
-        conferenceConverter.toDto(id)
-            .let { conferenceQueryService.findConferenceInfo(it) }
-            .let { conferenceConverter.toResponse(it) }
-            .let { ResponseEntity.ok(it) }
-
-    @GetMapping("people/{id}")
-    fun findConferencePeople(@PathVariable id: Long): ResponseEntity<ConferencePeopleResponse> =
-        conferenceConverter.toDto(id)
-            .let { conferenceQueryService.findConferencePeople(it) }
-            .let { conferenceConverter.toResponse(it) }
-            .let { ResponseEntity.ok(it) }
 
 }
