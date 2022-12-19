@@ -15,5 +15,7 @@ data class CreateConferenceRequest(
     @field:NotNull
     val startTime: Int,
     @field:NotNull
-    val endTime: Int
+    val endTime: Int,
+    @field:NotNull
+    val maxCount: Int
 )
