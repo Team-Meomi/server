@@ -1,5 +1,7 @@
 package com.project.meomi.domain.conference.presentation.data.response
 
+import com.project.meomi.domain.conference.presentation.data.dto.ConferenceQueryDto
+import com.project.meomi.domain.user.domain.User
 import com.project.meomi.domain.user.presentation.data.type.Gender
 import java.time.LocalDate
 
@@ -12,11 +14,8 @@ data class ConferenceResponse(
     val startTime: Int,
     val endTime: Int,
     val isMine: Boolean,
-    val user: UserResponse
-) {
-    data class UserResponse(
-        val id: Long,
-        val name: String,
-        val gender: Gender
-    )
-}
+    val isStatus: Boolean,
+    val writer: ConferenceQueryDto.UserResponse,
+    val count: ConferenceQueryDto.CountResponse,
+    val list: List<ConferenceQueryDto.UserResponse>
+)
