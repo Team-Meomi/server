@@ -21,6 +21,7 @@ class Conference(
     var endTime: Int,
     @ColumnDefault(value = "0")
     var count: Int,
+    var maxCount: Int,
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
@@ -33,6 +34,7 @@ class Conference(
         this.startTime = dto.startTime
         this.endTime = dto.endTime
         this.count = count
+        this.maxCount = dto.maxCount
     }
     fun addCount() {
         this.count += 1
