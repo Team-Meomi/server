@@ -31,8 +31,8 @@ class ConferenceServiceImpl(
     override fun joinConference(dto: ConferenceDto) {
         val conference = conferenceRepository.findConferenceById(dto.id)
             ?: throw ConferenceNotFoundException()
-        isSmallerThanForty(conference.count)
 
+        isSmallerThanForty(conference.count)
         if(conferencePeopleRepository.existsConferencePeopleByConferenceIdAndConferenceUserId(conference.id, userUtil.currentUser().id)) {
             throw DuplicateConferenceApplicantException()
         }
@@ -47,28 +47,28 @@ class ConferenceServiceImpl(
     override fun cancelConference(dto: ConferenceDto) {
         val conference = conferenceRepository.findConferenceById(dto.id)
             ?: throw ConferenceNotFoundException()
+
         conference.removeCount()
         conferencePeopleRepository.deleteConferencePeopleByUserId(userUtil.currentUser().id)
     }
 
     @Transactional(rollbackFor = [Exception::class])
     override fun updateConference(dto: ConferenceDto) {
-        validateConference(dto.id)
+        conferenceRepository.findConferenceById(dto.id)
+            .let { it ?: throw ConferenceNotFoundException() }
             .let { it.updateConference(dto, it.count) }
     }
 
     @Transactional(rollbackFor = [Exception::class])
     override fun deleteConference(dto: ConferenceDto) {
-        validateConference(dto.id)
-            .let { conferenceRepository.deleteById(it.id) }
+        conferenceRepository.findConferenceById(dto.id)
+            .let { it ?: throw ConferenceNotFoundException() }
+            .let { conferenceRepository.delete(it) }
     }
 
     private fun isSmallerThanForty(count: Int): Boolean {
         if (count >= 40) throw ConferenceCountOverException()
         return true
     }
-
-    private fun validateConference(id: Long): Conference =
-        conferenceRepository.findConferenceById(id) ?: throw ConferenceNotFoundException()
 
 }

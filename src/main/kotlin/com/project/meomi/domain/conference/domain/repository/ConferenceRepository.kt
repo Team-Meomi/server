@@ -6,6 +6,6 @@ import java.time.LocalDate
 
 interface ConferenceRepository: CrudRepository<Conference, Long> {
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    fun findConferenceById(id: Long): Conference?
+    fun findConferenceById(conferenceId: Long): Conference?
     fun existsConferenceByDateAndStartTimeAndEndTime(date: LocalDate, startTime: Int, endTime: Int): Boolean
 }
