@@ -1,6 +1,5 @@
 package com.project.meomi.domain.user.domain
 
-import com.project.meomi.domain.user.presentation.data.type.Gender
 import com.project.meomi.domain.user.presentation.data.type.Role
 import javax.persistence.*
 
@@ -13,8 +12,6 @@ class User(
     val password: String,
     val name: String,
     val stuNum: Int,
-    @Enumerated(EnumType.STRING)
-    val gender: Gender,
     @Enumerated(EnumType.STRING)
     @ElementCollection
     @CollectionTable(name = "roles", joinColumns = [JoinColumn(name = "user_id")])
