@@ -2,13 +2,10 @@ package com.project.meomi.domain.study.presentation.data.dto
 
 import java.time.LocalDate
 
-data class StudyDto(
+data class StudyQueryListDto(
     val id: Long,
     val title: String,
-    val content: String,
     val category: String,
     val date: LocalDate,
-    val count: Int,
-    val maxCount: Int,
-    val studyType: String
+    val studyType: String,
 )

@@ -9,6 +9,7 @@ data class StudyResponse(
     val content: String,
     val category: String,
     val date: LocalDate,
+    val studyType: String,
     val isMine: Boolean,
     val isStatus: Boolean,
     val writer: StudyQueryDto.UserResponse,

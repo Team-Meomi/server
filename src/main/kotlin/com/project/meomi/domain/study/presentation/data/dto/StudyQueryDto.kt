@@ -1,6 +1,5 @@
 package com.project.meomi.domain.study.presentation.data.dto
 
-import com.project.meomi.domain.user.presentation.data.type.Gender
 import java.time.LocalDate
 
 data class StudyQueryDto(
@@ -9,6 +8,7 @@ data class StudyQueryDto(
     val content: String,
     val category: String,
     val date: LocalDate,
+    val studyType: String,
     val isMine: Boolean,
     val isStatus: Boolean,
     val writer: UserResponse,
@@ -24,6 +24,5 @@ data class StudyQueryDto(
         val id: Long,
         val stuNum: Int,
         val name: String,
-        val gender: Gender
     )
 }

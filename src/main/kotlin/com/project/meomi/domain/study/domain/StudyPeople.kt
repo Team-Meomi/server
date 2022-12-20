@@ -17,5 +17,5 @@ class StudyPeople(
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
-    val user: User
+    val user: User,
 )

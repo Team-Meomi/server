@@ -47,6 +47,8 @@ class SecurityConfig(
             .antMatchers(HttpMethod.DELETE, "/api/v1/user/study/**").authenticated()
             .antMatchers(HttpMethod.PATCH, "/api/v1/user/study/**").authenticated()
 
+            .antMatchers(HttpMethod.GET, "/api/v1/user/**").authenticated()
+
             .antMatchers("/api/v1/user/**").hasRole("USER")
             .antMatchers("api/vi/admin/**").hasRole("ADMIN")
 

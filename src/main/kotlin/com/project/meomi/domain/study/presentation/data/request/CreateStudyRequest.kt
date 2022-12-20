@@ -7,6 +7,6 @@ data class CreateStudyRequest(
     val content: String,
     val category: String,
     val date: LocalDate,
-    val startTime: Int,
-    val endTime: Int,
+    val maxCount: Int,
+    val studyType: String
 )

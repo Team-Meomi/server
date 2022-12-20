@@ -2,12 +2,12 @@ package com.project.meomi.domain.study.service.impl
 
 import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
-import com.project.meomi.domain.study.exception.DuplicateStudyApplicantException
-import com.project.meomi.domain.study.exception.StudyCountOverException
 import com.project.meomi.domain.study.exception.StudyNotFountException
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
+import com.project.meomi.domain.study.presentation.data.type.ValidatorType
 import com.project.meomi.domain.study.service.StudyService
 import com.project.meomi.domain.study.utils.StudyConverter
+import com.project.meomi.domain.study.utils.StudyValidator
 import com.project.meomi.domain.user.utils.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +17,8 @@ class StudyServiceImpl(
     private val studyRepository: StudyRepository,
     private val studyPeopleRepository: StudyPeopleRepository,
     private val studyConverter: StudyConverter,
-    private val userUtil: UserUtil
+    private val userUtil: UserUtil,
+    private val studyValidator: StudyValidator
 ): StudyService {
 
     @Transactional(rollbackFor = [Exception::class])
@@ -27,26 +28,19 @@ class StudyServiceImpl(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun joinStudy(dto: StudyDto) {
-        val study = studyRepository.findStudyById(dto.id)
-            ?: throw StudyNotFountException()
-
-        isSmallerThanFive(study.count)
-        if(studyPeopleRepository.existsConferencePeopleByStudyIdAndStudyUserId(study.id, userUtil.currentUser().id)) {
-            throw DuplicateStudyApplicantException()
-        }
-
-        studyConverter.toEntity(study, userUtil.currentUser())
-            .let { studyPeopleRepository.save(it) }
-        study.addCount()
-    }
+    override fun joinStudy(dto: StudyDto) =
+        studyValidator.validate(ValidatorType.CONFERENCE, dto)
+            .let { studyConverter.toEntity(it, userUtil.currentUser()) }
+            .let { studyPeopleRepository.save(it) }.study.addCount()
 
     @Transactional(rollbackFor = [Exception::class])
     override fun cancelStudy(dto: StudyDto) {
-        val study = studyRepository.findStudyById(dto.id)
-            ?: throw StudyNotFountException()
-        study.removeCount()
-        studyPeopleRepository.deleteStudyPeopleByStudyId(study.id)
+        studyRepository.findStudyById(dto.id)
+            .let { it ?: throw StudyNotFountException() }
+            .let {
+                it.removeCount()
+                studyPeopleRepository.deleteStudyPeopleByStudyId(it.id)
+            }
     }
 
     @Transactional(rollbackFor = [Exception::class])
@@ -55,16 +49,10 @@ class StudyServiceImpl(
             .let { it ?: throw StudyNotFountException() }
             .let { it.updateStudy(dto, it.count) }
 
-
     @Transactional(rollbackFor = [Exception::class])
     override fun deleteStudy(dto: StudyDto) =
         studyRepository.findStudyById(dto.id)
             .let { it ?: throw StudyNotFountException() }
             .let { studyRepository.delete(it) }
-
-    private fun isSmallerThanFive(count: Int): Boolean {
-        if(count >= 5) throw StudyCountOverException()
-        return true
-    }
 
 }

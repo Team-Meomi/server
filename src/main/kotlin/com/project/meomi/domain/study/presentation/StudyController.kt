@@ -3,22 +3,16 @@ package com.project.meomi.domain.study.presentation
 import com.project.meomi.domain.study.presentation.data.request.CreateStudyRequest
 import com.project.meomi.domain.study.presentation.data.request.UpdateStudyRequest
 import com.project.meomi.domain.study.presentation.data.response.CheckStudyResponse
+import com.project.meomi.domain.study.presentation.data.response.StudyListResponse
 import com.project.meomi.domain.study.presentation.data.response.StudyResponse
 import com.project.meomi.domain.study.service.StudyQueryService
 import com.project.meomi.domain.study.service.StudyService
 import com.project.meomi.domain.study.utils.StudyConverter
+import com.project.meomi.domain.study.utils.StudyQueryConverter
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
@@ -26,7 +20,8 @@ import javax.validation.Valid
 class StudyController(
     private val studyService: StudyService,
     private val studyQueryService: StudyQueryService,
-    private val studyConverter: StudyConverter
+    private val studyConverter: StudyConverter,
+    private val studyQueryConverter: StudyQueryConverter
 ) {
 
     @PostMapping
@@ -54,14 +49,21 @@ class StudyController(
     fun findStudyById(@PathVariable id: Long): ResponseEntity<StudyResponse> =
         studyConverter.toDto(id)
             .let { studyQueryService.findStudyById(it) }
-            .let { studyConverter.toResponse(it) }
+            .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 
-    @PostMapping("check")
+    @PostMapping("homebase")
     fun checkHomeBaseIsRent(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: String): ResponseEntity<CheckStudyResponse> =
         studyConverter.toDto(date)
             .let { studyQueryService.checkHomeBaseIsRent(it) }
-            .let { studyConverter.toResponse(it) }
+            .let { studyQueryConverter.toResponse(it) }
+            .let { ResponseEntity.ok(it) }
+
+    @PostMapping("audiovisual")
+    fun checkAudiovisualIsRent(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: String): ResponseEntity<CheckStudyResponse> =
+        studyConverter.toDto(date)
+            .let { studyQueryService.checkAudiovisualIsRent(it) }
+            .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 
     @PostMapping("{id}")
@@ -75,5 +77,11 @@ class StudyController(
         studyConverter.toDto(id)
             .let { studyService.cancelStudy(it) }
             .let { ResponseEntity.ok().build() }
+
+    @GetMapping
+    fun findAllStudies(): ResponseEntity<List<StudyListResponse>> =
+        studyQueryService.findAllStudies()
+            .let { studyQueryConverter.toResponse(it) }
+            .let { ResponseEntity.ok(it) }
 
 }
