@@ -6,6 +6,6 @@ import com.project.meomi.domain.study.presentation.data.type.ValidatorType
 
 interface StudyValidator {
 
-    fun validate(studyType: ValidatorType, dto: StudyDto): Study
+    fun validate(validatorType: ValidatorType, dto: StudyDto): Study
 
 }

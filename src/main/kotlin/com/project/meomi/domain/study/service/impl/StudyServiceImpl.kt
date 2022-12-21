@@ -29,14 +29,13 @@ class StudyServiceImpl(
 
     @Transactional(rollbackFor = [Exception::class])
     override fun joinStudy(dto: StudyDto) =
-        studyValidator.validate(ValidatorType.CONFERENCE, dto)
+        studyValidator.validate(ValidatorType.JOIN, dto)
             .let { studyConverter.toEntity(it, userUtil.currentUser()) }
             .let { studyPeopleRepository.save(it) }.study.addCount()
 
     @Transactional(rollbackFor = [Exception::class])
     override fun cancelStudy(dto: StudyDto) {
-        studyRepository.findStudyById(dto.id)
-            .let { it ?: throw StudyNotFountException() }
+        studyValidator.validate(ValidatorType.CANCEL, dto)
             .let {
                 it.removeCount()
                 studyPeopleRepository.deleteStudyPeopleByStudyId(it.id)
