@@ -9,6 +9,7 @@ import com.project.meomi.domain.user.presentation.data.dto.UserDto
 import com.project.meomi.domain.user.presentation.data.dto.UserQueryDto
 import com.project.meomi.domain.user.service.UserQueryService
 import com.project.meomi.domain.user.utils.UserQueryConverter
+import com.project.meomi.domain.user.utils.UserUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,8 +18,14 @@ class UserQueryServiceImpl(
     private val userRepository: UserRepository,
     private val studyRepository: StudyRepository,
     private val userQueryConverter: UserQueryConverter,
-    private val studyQueryConverter: StudyQueryConverter
+    private val studyQueryConverter: StudyQueryConverter,
+    private val userUtil: UserUtil
 ): UserQueryService {
+
+    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    override fun findMyInfo(): UserQueryDto =
+        userUtil.currentUser()
+            .let { userQueryConverter.toQueryDto(it) }
 
     @Transactional(readOnly = true, rollbackFor = [Exception::class])
     override fun findUserInfo(dto: UserDto): UserQueryDto =

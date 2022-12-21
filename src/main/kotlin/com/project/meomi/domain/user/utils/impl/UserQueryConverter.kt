@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component
 class UserQueryConverterImpl: UserQueryConverter {
 
     override fun toQueryDto(user: User): UserQueryDto =
-        UserQueryDto(user.name, user.stuNum)
+        UserQueryDto(id = user.id, name = user.name, stuNum = user.stuNum)
 
     override fun toResponse(dto: TokenDto): TokenResponse =
         TokenResponse(accessToken = dto.accessToken, refreshToken = dto.refreshToken, expiredAt = dto.expiredAt)
 
     override fun toResponse(dto: UserQueryDto): UserInfoResponse =
-        UserInfoResponse(dto.name, dto.stuNum)
+        UserInfoResponse(id = dto.id, name = dto.name, stuNum = dto.stuNum)
 
 }

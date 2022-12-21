@@ -6,6 +6,7 @@ import com.project.meomi.domain.user.presentation.data.dto.UserQueryDto
 
 interface UserQueryService {
 
+    fun findMyInfo(): UserQueryDto
     fun findUserInfo(dto: UserDto): UserQueryDto
     fun findWrittenStudy(dto: UserDto): List<StudyQueryListDto>
     fun findJoinedStudy(dto: UserDto): List<StudyQueryListDto>

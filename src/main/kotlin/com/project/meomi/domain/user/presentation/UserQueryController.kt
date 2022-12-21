@@ -21,6 +21,12 @@ class UserQueryController(
     private val studyQueryConverter: StudyQueryConverter
 ) {
 
+    @GetMapping
+    fun findMyInfo(): ResponseEntity<UserInfoResponse> =
+        userQueryService.findMyInfo()
+            .let { userQueryConverter.toResponse(it) }
+            .let { ResponseEntity.ok(it) }
+
     @GetMapping("{id}")
     fun findUserInfo(@PathVariable id: Long): ResponseEntity<UserInfoResponse> =
         userConverter.toDto(id)
@@ -41,6 +47,5 @@ class UserQueryController(
             .let { userQueryService.findJoinedStudy(it) }
             .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
-
 
 }
