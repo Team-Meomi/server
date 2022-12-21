@@ -70,7 +70,7 @@ class StudyController(
     fun joinStudy(@PathVariable id: Long): ResponseEntity<Void> =
         studyConverter.toDto(id)
             .let { studyService.joinStudy(it) }
-            .let { ResponseEntity.ok().build() }
+            .let { return ResponseEntity.ok().build() }
 
     @DeleteMapping("cancel/{id}")
     fun cancelStudy(@PathVariable id: Long): ResponseEntity<Void> =
@@ -81,6 +81,16 @@ class StudyController(
     @GetMapping
     fun findAllStudies(): ResponseEntity<List<StudyListResponse>> =
         studyQueryService.findAllStudies()
+            .let { studyQueryConverter.toResponse(it) }
+            .let { ResponseEntity.ok(it) }
+
+    @GetMapping("search")
+    fun findStudyByKeyword(
+        @RequestParam(required = false) title: String,
+        @RequestParam(required = false) category: String
+    ): ResponseEntity<List<StudyListResponse>> =
+        studyConverter.toDto(title, category)
+            .let { studyQueryService.findStudyByKeyword(it) }
             .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 

@@ -8,5 +8,6 @@ interface StudyQueryService {
     fun checkHomeBaseIsRent(dto: StudyDto): Boolean
     fun findStudyById(dto: StudyDto): StudyQueryDto
     fun findAllStudies(): List<StudyQueryListDto>
+    fun findStudyByKeyword(dto: StudyKeywordDto): List<StudyQueryListDto>
 
 }

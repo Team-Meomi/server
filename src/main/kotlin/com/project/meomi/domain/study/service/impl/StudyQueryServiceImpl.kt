@@ -4,6 +4,7 @@ import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
 import com.project.meomi.domain.study.exception.StudyNotFountException
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
+import com.project.meomi.domain.study.presentation.data.dto.StudyKeywordDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyQueryDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyQueryListDto
 import com.project.meomi.domain.study.service.StudyQueryService
@@ -44,6 +45,29 @@ class StudyQueryServiceImpl(
     override fun findAllStudies(): List<StudyQueryListDto> =
         studyRepository.findAllByOrderByCreateAtDesc()
             .map { studyQueryConverter.toQueryListDto(it) }
+
+    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    override fun findStudyByKeyword(dto: StudyKeywordDto): List<StudyQueryListDto> {
+
+        if(dto.title != null && dto.category == "") {
+            return studyRepository.findStudyByTitleContainsOrderByCreateAtDesc(dto.title)
+                .map{ studyQueryConverter.toQueryListDto(it) }
+        }
+
+        if(dto.title == "" && dto.category != null) {
+            return studyRepository.findStudyByCategoryOrderByCreateAtDesc(dto.category)
+                .map{ studyQueryConverter.toQueryListDto(it) }
+        }
+
+        if(dto.title != null && dto.category != null) {
+            return studyRepository.findStudyByTitleContainsAndCategoryOrderByCreateAtDesc(dto.title, dto.category)
+                .map { studyQueryConverter.toQueryListDto(it) }
+        }
+
+        return studyRepository.findAllByOrderByCreateAtDesc()
+            .map { studyQueryConverter.toQueryListDto(it) }
+
+    }
 
     private fun isStudyMine(studyUserId: Long) =
         userUtil.currentUser().id == studyUserId

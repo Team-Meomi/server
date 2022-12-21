@@ -3,6 +3,7 @@ package com.project.meomi.domain.study.utils.impl
 import com.project.meomi.domain.study.domain.Study
 import com.project.meomi.domain.study.domain.StudyPeople
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
+import com.project.meomi.domain.study.presentation.data.dto.StudyKeywordDto
 import com.project.meomi.domain.study.presentation.data.request.CreateStudyRequest
 import com.project.meomi.domain.study.presentation.data.request.UpdateStudyRequest
 import com.project.meomi.domain.study.utils.StudyConverter
@@ -59,6 +60,12 @@ class StudyConverterImpl: StudyConverter {
             count = 0,
             maxCount = 0,
             studyType = ""
+        )
+
+    override fun toDto(title: String, category: String): StudyKeywordDto =
+        StudyKeywordDto(
+            title = title,
+            category = category
         )
 
     override fun toEntity(dto: StudyDto, user: User): Study =
