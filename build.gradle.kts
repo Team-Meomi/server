@@ -54,9 +54,6 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-	// redis
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-
 	// swagger
 	implementation("io.springfox:springfox-swagger-ui:3.0.0")
 	implementation("io.springfox:springfox-boot-starter:3.0.0")
