@@ -13,16 +13,21 @@ enum class ErrorCode(
 
 
     // TOKEN
-    INVALID_TOKEN("유효하지 않은 토큰입니다.", 401),
-    EXPIRED_TOKEN("만료된 토큰 입니다.", 401),
-    REFRESH_TOKEN_EXPIRED("만료된 RefreshToken 입니다.", 401),
+    INVALID_TOKEN("유효하지 않은 토큰입니다.", 403),
+    EXPIRED_TOKEN("만료된 토큰 입니다.", 403),
+    REFRESH_TOKEN_EXPIRED("만료된 RefreshToken 입니다.", 403),
 
 
     // STUDY
     STUDY_NOT_FOUNT("스터디를 찾을 수 없습니다.", 404),
-    STUDY_COUNT_OVER("스터디 최대 수용 인원을 초과했습니다.", 400),
+    FULL_STUDY_COUNT("스터디 최대 수용 인원을 초과했습니다.", 400),
     DUPLICATE_APPLICANT("중복된 신청자 입니다.", 409),
     APPLICANT_NOT_FOUNT("신청자를 찾을 수 없습니다.", 404),
+    FULL_STUDY_TEAM("홈베이스 최대 팀을 초과 했습니다.", 400),
+
+
+    // COMMENT
+    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", 404),
 
 
     // SERVER
