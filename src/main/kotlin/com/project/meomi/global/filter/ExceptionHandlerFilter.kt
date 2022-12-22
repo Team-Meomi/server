@@ -26,16 +26,8 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
             filterChain.doFilter(request, response)
         }.onFailure { throwable ->
             when (throwable) {
-                is ExpiredJwtException -> {
-                    println("만료된 토큰")
-                    println(request.getHeader("Authorization"))
-                    setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
-                }
-                is JwtException -> {
-                    println("유효하지 않은 토큰")
-                    println(request.getHeader("Authorization"))
-                    setErrorResponse(ErrorCode.INVALID_TOKEN, response)
-                }
+                is ExpiredJwtException -> setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
+                is JwtException -> setErrorResponse(ErrorCode.INVALID_TOKEN, response)
                 is UserNotFoundException -> setErrorResponse(ErrorCode.USER_NOT_FOUND, response)
                 else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
             }
@@ -46,11 +38,8 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
         response.status = errorCode.status
         response.contentType = "application/json"
         response.characterEncoding = "utf-8"
-        println("response 됨 1")
         val errorResponse = ErrorResponse(errorCode.message, errorCode.status)
-        println("response 됨 2")
         val errorResponseEntityToJson = ObjectMapper().writeValueAsString(errorResponse)
-        println("response 됨 3")
         response.writer.write(errorResponseEntityToJson)
     }
 
