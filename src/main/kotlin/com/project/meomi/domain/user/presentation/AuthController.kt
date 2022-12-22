@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("api/v1/user/auth")
+@RequestMapping("api/v1/auth")
 class AuthController(
     private val userConverter: UserConverter,
     private val userQueryConverter: UserQueryConverter,
@@ -41,7 +41,7 @@ class AuthController(
 
     @ApiOperation(value = "토큰 재발급", notes = "refreshToken을 통해 토큰을 재발급합니다.")
     @PatchMapping
-    fun reissue(@RequestHeader("Refresh-Token") refreshToken: String): ResponseEntity<TokenResponse> =
+    fun reissue(@RequestHeader("RefreshToken") refreshToken: String): ResponseEntity<TokenResponse> =
         userConverter.toDto(refreshToken)
             .let { reissueTokenService.reissueToken(it) }
             .let { userQueryConverter.toResponse(it) }
