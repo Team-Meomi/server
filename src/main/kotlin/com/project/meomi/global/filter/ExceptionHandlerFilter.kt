@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class ExceptionHandlerFilter(
     private val objectMapper: ObjectMapper
-) : OncePerRequestFilter() {
+): OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
