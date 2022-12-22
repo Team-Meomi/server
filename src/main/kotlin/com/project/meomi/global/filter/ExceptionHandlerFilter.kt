@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class ExceptionHandlerFilter(
-    private val objectMapper: ObjectMapper
-): OncePerRequestFilter() {
+class ExceptionHandlerFilter: OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -27,10 +25,10 @@ class ExceptionHandlerFilter(
             filterChain.doFilter(request, response)
         }.onFailure { throwable ->
             when (throwable) {
-                is ExpiredJwtException -> setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
+                is ExpiredJwtException -> println("만료된 토큰") /*setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)*/
                 is JwtException -> setErrorResponse(ErrorCode.INVALID_TOKEN, response)
                 is UserNotFoundException -> setErrorResponse(ErrorCode.USER_NOT_FOUND, response)
-//                else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
+                else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
             }
         }
     }
@@ -39,7 +37,7 @@ class ExceptionHandlerFilter(
         response.status = errorCode.status
         response.contentType = "application/json; charset=utf-8"
         val errorResponse = ErrorResponse(errorCode.message, errorCode.status)
-        val errorResponseEntityToJson = objectMapper.writeValueAsString(errorResponse)
+        val errorResponseEntityToJson = ObjectMapper().writeValueAsString(errorResponse)
         response.writer.write(errorResponseEntityToJson)
     }
 
