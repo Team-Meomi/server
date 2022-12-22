@@ -2,6 +2,7 @@ package com.project.meomi.domain.study.service.impl
 
 import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
+import com.project.meomi.domain.study.exception.FullStudyTeamException
 import com.project.meomi.domain.study.exception.StudyNotFountException
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyKeywordDto
@@ -27,8 +28,12 @@ class StudyQueryServiceImpl(
     }
 
     @TransactionWithReadOnly
-    override fun checkHomeBaseIsRent(dto: StudyDto): Boolean =
-        !studyRepository.existsByDateAndStudyType(dto.date,"스터디")
+    override fun checkHomeBaseIsRent(dto: StudyDto): Boolean {
+        if (studyRepository.findStudyByDateAndStudyType(dto.date, "스터디").size >= 3) {
+            throw FullStudyTeamException()
+        }
+        return true
+    }
 
     @TransactionWithReadOnly
     override fun findStudyById(dto: StudyDto): StudyQueryDto {
