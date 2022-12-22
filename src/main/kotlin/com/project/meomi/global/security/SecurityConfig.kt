@@ -52,6 +52,7 @@ class SecurityConfig(
             .antMatchers("/api/v1/user/**").hasRole("USER")
             .antMatchers("api/vi/admin/**").hasRole("ADMIN")
 
+            .anyRequest().authenticated()
         http
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(exceptionHandlerFilter, JwtRequestFilter::class.java)
