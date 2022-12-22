@@ -20,13 +20,20 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        println("필터 옴")
         runCatching {
             filterChain.doFilter(request, response)
         }.onFailure { throwable ->
             when (throwable) {
-                is ExpiredJwtException -> println("만료된 토큰") /*setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)*/
-                is JwtException -> println("유효하지 않은 토큰") /*setErrorResponse(ErrorCode.INVALID_TOKEN, response)*/
+                is ExpiredJwtException -> {
+                    println("만료된 토큰")
+                    println(request.getHeader("Authorization"))
+                    setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
+                } /*setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)*/
+                is JwtException -> {
+                    println("유효하지 않은 토큰")
+                    println(request.getHeader("Authorization"))
+                    setErrorResponse(ErrorCode.INVALID_TOKEN, response)
+                }
                 is UserNotFoundException -> setErrorResponse(ErrorCode.USER_NOT_FOUND, response)
                 else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
             }
