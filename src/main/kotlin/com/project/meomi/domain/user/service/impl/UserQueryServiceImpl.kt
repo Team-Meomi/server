@@ -10,8 +10,8 @@ import com.project.meomi.domain.user.presentation.data.dto.UserQueryDto
 import com.project.meomi.domain.user.service.UserQueryService
 import com.project.meomi.domain.user.utils.UserQueryConverter
 import com.project.meomi.domain.user.utils.UserUtil
+import com.project.meomi.global.annotation.TransactionWithReadOnly
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserQueryServiceImpl(
@@ -22,23 +22,23 @@ class UserQueryServiceImpl(
     private val userUtil: UserUtil
 ): UserQueryService {
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findMyInfo(): UserQueryDto =
         userUtil.currentUser()
             .let { userQueryConverter.toQueryDto(it) }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findUserInfo(dto: UserDto): UserQueryDto =
         userRepository.findUserById(dto.id)
             .let { it ?: throw UserNotFoundException() }
             .let { userQueryConverter.toQueryDto(it) }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findWrittenStudy(dto: UserDto) =
         studyRepository.findStudyByUserIdOrderByCreateAtDesc(dto.id)
             .map { studyQueryConverter.toQueryListDto(it) }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findJoinedStudy(dto: UserDto): List<StudyQueryListDto> =
         studyRepository.findJoinStudyByUserId(dto.id)
             .map { studyQueryConverter.toQueryListDto(it) }

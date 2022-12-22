@@ -5,7 +5,6 @@ import com.project.meomi.domain.user.presentation.data.dto.ReissueTokenDto
 import com.project.meomi.domain.user.presentation.data.dto.UserDto
 import com.project.meomi.domain.user.presentation.data.request.SignInRequest
 import com.project.meomi.domain.user.presentation.data.request.SignUpRequest
-import com.project.meomi.domain.user.presentation.data.type.Role
 import com.project.meomi.domain.user.utils.UserConverter
 import org.springframework.stereotype.Component
 import java.util.*
@@ -26,6 +25,6 @@ class UserConverterImpl : UserConverter {
         UserDto(id = id, email = "", password = "", name = "", stuNum = -1)
 
     override fun toEntity(dto: UserDto, encodePassword: String): User =
-        User(id = -1, email = dto.email, password = encodePassword, name = dto.name, stuNum = dto.stuNum, roles = Collections.singletonList(Role.USER), refreshToken = "")
+        User(id = -1, email = dto.email, password = encodePassword, name = dto.name, stuNum = dto.stuNum, refreshToken = "")
 
 }
