@@ -42,9 +42,11 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
 
     fun setErrorResponse(errorCode: ErrorCode, response: HttpServletResponse) {
         response.status = errorCode.status
-        response.contentType = "application/json; charset=utf-8"
+        response.contentType = "application/json"
+        response.characterEncoding = "utf-8"
         val errorResponse = ErrorResponse(errorCode.message, errorCode.status)
         val errorResponseEntityToJson = ObjectMapper().writeValueAsString(errorResponse)
+        println("response 됨")
         response.writer.write(errorResponseEntityToJson)
     }
 
