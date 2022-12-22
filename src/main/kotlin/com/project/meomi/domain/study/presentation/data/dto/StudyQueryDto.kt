@@ -11,16 +11,16 @@ data class StudyQueryDto(
     val studyType: String,
     val isMine: Boolean,
     val isStatus: Boolean,
-    val writer: UserResponse,
-    val count: CountResponse,
-    val list: List<UserResponse>
+    val writer: UserDto,
+    val count: CountDto,
+    val list: List<UserDto>
 ) {
-    data class CountResponse(
+    data class CountDto(
         val count: Int,
         val maxCount: Int
     )
 
-    data class UserResponse(
+    data class UserDto(
         val id: Long,
         val stuNum: Int,
         val name: String,

@@ -23,14 +23,14 @@ class StudyQueryConverterImpl: StudyQueryConverter {
             studyType = study.studyType,
             isMine = isMine,
             isStatus = isStatus,
-            writer = StudyQueryDto.UserResponse(
+            writer = StudyQueryDto.UserDto(
                 study.user.id,
                 study.user.stuNum,
                 study.user.name
             ),
-            count = StudyQueryDto.CountResponse(study.count, study.maxCount),
+            count = StudyQueryDto.CountDto(study.count, study.maxCount),
             list = studyPeople.map {
-                StudyQueryDto.UserResponse(
+                StudyQueryDto.UserDto(
                     it.user.id,
                     it.user.stuNum,
                     it.user.name

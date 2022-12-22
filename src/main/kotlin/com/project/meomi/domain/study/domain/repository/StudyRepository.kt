@@ -14,6 +14,7 @@ interface StudyRepository : CrudRepository<Study, Long> {
     @Lock(LockModeType.PESSIMISTIC_READ)
     fun findStudyById(studyId: Long): Study?
     fun existsByDateAndStudyType(date: LocalDate, studyType: String): Boolean
+    fun findStudyByDateAndStudyType(date: LocalDate, studyType: String): List<Study>
     fun findAllByOrderByCreateAtDesc(): List<Study>
     fun findStudyByUserIdOrderByCreateAtDesc(userId: Long): List<Study>
     @Query("select study from Study study, StudyPeople studyPeople where studyPeople.user.id = :userId and studyPeople.study.id = study.id order by study.createAt desc")

@@ -30,6 +30,7 @@ class Study(
     fun updateStudy(dto: StudyDto, count: Int) {
         this.title = dto.title
         this.content = dto.content
+        this.category = dto.category
         this.date = dto.date
         this.count = count
         this.maxCount = dto.maxCount

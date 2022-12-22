@@ -12,7 +12,7 @@ data class StudyResponse(
     val studyType: String,
     val isMine: Boolean,
     val isStatus: Boolean,
-    val writer: StudyQueryDto.UserResponse,
-    val count: StudyQueryDto.CountResponse,
-    val list: List<StudyQueryDto.UserResponse>
+    val writer: StudyQueryDto.UserDto,
+    val count: StudyQueryDto.CountDto,
+    val list: List<StudyQueryDto.UserDto>
 )

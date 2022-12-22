@@ -10,8 +10,8 @@ import com.project.meomi.domain.study.presentation.data.dto.StudyQueryListDto
 import com.project.meomi.domain.study.service.StudyQueryService
 import com.project.meomi.domain.study.utils.StudyQueryConverter
 import com.project.meomi.domain.user.utils.UserUtil
+import com.project.meomi.global.annotation.TransactionWithReadOnly
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class StudyQueryServiceImpl(
@@ -21,16 +21,16 @@ class StudyQueryServiceImpl(
     private val userUtil: UserUtil
 ): StudyQueryService {
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun checkAudiovisualIsRent(dto: StudyDto): Boolean {
         return !studyRepository.existsByDateAndStudyType(dto.date, "컨퍼런스")
     }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun checkHomeBaseIsRent(dto: StudyDto): Boolean =
         !studyRepository.existsByDateAndStudyType(dto.date,"스터디")
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findStudyById(dto: StudyDto): StudyQueryDto {
         val study = studyRepository.findStudyById(dto.id)
             ?: throw StudyNotFountException()
@@ -41,12 +41,12 @@ class StudyQueryServiceImpl(
         return studyQueryConverter.toQueryDto(study, isStudyMine(study.user.id), isStatus, studyPeople)
     }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findAllStudies(): List<StudyQueryListDto> =
         studyRepository.findAllByOrderByCreateAtDesc()
             .map { studyQueryConverter.toQueryListDto(it) }
 
-    @Transactional(readOnly = true, rollbackFor = [Exception::class])
+    @TransactionWithReadOnly
     override fun findStudyByKeyword(dto: StudyKeywordDto): List<StudyQueryListDto> {
 
         if(dto.title != null && dto.category == "") {
@@ -69,7 +69,7 @@ class StudyQueryServiceImpl(
 
     }
 
-    private fun isStudyMine(studyUserId: Long) =
-        userUtil.currentUser().id == studyUserId
+    private fun isStudyMine(studyWriterId: Long) =
+        userUtil.currentUser().id == studyWriterId
 
 }

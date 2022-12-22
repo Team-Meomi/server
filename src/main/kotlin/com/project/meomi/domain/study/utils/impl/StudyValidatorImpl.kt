@@ -3,12 +3,10 @@ package com.project.meomi.domain.study.utils.impl
 import com.project.meomi.domain.study.domain.Study
 import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
-import com.project.meomi.domain.study.exception.ApplicantNotFountException
-import com.project.meomi.domain.study.exception.DuplicateApplicantException
-import com.project.meomi.domain.study.exception.StudyCountOverException
-import com.project.meomi.domain.study.exception.StudyNotFountException
+import com.project.meomi.domain.study.exception.*
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
-import com.project.meomi.domain.study.presentation.data.type.ValidatorType
+import com.project.meomi.domain.study.presentation.data.type.ApplicantValidatorType
+import com.project.meomi.domain.study.presentation.data.type.CreateValidatorType
 import com.project.meomi.domain.study.utils.StudyValidator
 import com.project.meomi.domain.user.utils.UserUtil
 import org.springframework.stereotype.Component
@@ -20,12 +18,30 @@ class StudyValidatorImpl(
     private val userUtil: UserUtil
 ): StudyValidator {
 
-    override fun validate(validatorType: ValidatorType, dto: StudyDto): Study =
-        when(validatorType) {
-            ValidatorType.JOIN -> validateJoinStudy(dto)
-            ValidatorType.CANCEL -> validateCancelStudy(dto)
+    override fun createValidate(validatorType: CreateValidatorType, dto: StudyDto) {
+        when (validatorType) {
+            CreateValidatorType.CONFERENCE -> validateCreateConference(dto)
+            CreateValidatorType.STUDY -> validateCreateStudy(dto)
+        }
+    }
+
+    override fun applicantValidate(validatorType: ApplicantValidatorType, dto: StudyDto): Study =
+        when (validatorType) {
+            ApplicantValidatorType.JOIN -> validateJoinStudy(dto)
+            ApplicantValidatorType.CANCEL -> validateCancelStudy(dto)
         }
 
+    private fun validateCreateConference(dto: StudyDto) {
+        if (studyRepository.existsByDateAndStudyType(dto.date, "컨퍼런스")) {
+            throw DuplicateApplicantException()
+        }
+    }
+
+    private fun validateCreateStudy(dto: StudyDto) {
+        if (studyRepository.findStudyByDateAndStudyType(dto.date, "스터디").size >= 3) {
+            throw FullStudyTeamException()
+        }
+    }
 
     private fun validateJoinStudy(dto: StudyDto): Study =
         studyRepository.findStudyById(dto.id)
@@ -49,7 +65,7 @@ class StudyValidatorImpl(
             }
 
     private fun isSmallerThanMaxCount(count: Int, maxCount: Int): Boolean {
-        if(count >= maxCount) throw StudyCountOverException()
+        if(count >= maxCount) throw FullStudyCountException()
         return true
     }
 
