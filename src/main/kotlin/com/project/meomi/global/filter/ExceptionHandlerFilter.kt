@@ -6,6 +6,8 @@ import com.project.meomi.global.error.response.ErrorResponse
 import com.project.meomi.global.error.type.ErrorCode
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -28,7 +30,7 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
                     println("만료된 토큰")
                     println(request.getHeader("Authorization"))
                     setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
-                } /*setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)*/
+                }
                 is JwtException -> {
                     println("유효하지 않은 토큰")
                     println(request.getHeader("Authorization"))
@@ -44,9 +46,11 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
         response.status = errorCode.status
         response.contentType = "application/json"
         response.characterEncoding = "utf-8"
+        println("response 됨 1")
         val errorResponse = ErrorResponse(errorCode.message, errorCode.status)
+        println("response 됨 2")
         val errorResponseEntityToJson = ObjectMapper().writeValueAsString(errorResponse)
-        println("response 됨")
+        println("response 됨 3")
         response.writer.write(errorResponseEntityToJson)
     }
 
