@@ -26,7 +26,7 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
         }.onFailure { throwable ->
             when (throwable) {
                 is ExpiredJwtException -> println("만료된 토큰") /*setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)*/
-                is JwtException -> setErrorResponse(ErrorCode.INVALID_TOKEN, response)
+                is JwtException -> println("유효하지 않은 토큰") /*setErrorResponse(ErrorCode.INVALID_TOKEN, response)*/
                 is UserNotFoundException -> setErrorResponse(ErrorCode.USER_NOT_FOUND, response)
                 else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
             }
