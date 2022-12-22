@@ -34,7 +34,7 @@ class ExceptionHandlerFilter(
         }
     }
 
-    private fun setErrorResponse(errorCode: ErrorCode, response: HttpServletResponse) {
+    fun setErrorResponse(errorCode: ErrorCode, response: HttpServletResponse) {
         response.status = errorCode.status
         response.contentType = "application/json; charset=utf-8"
         val errorResponse = ErrorResponse(errorCode.message, errorCode.status)
