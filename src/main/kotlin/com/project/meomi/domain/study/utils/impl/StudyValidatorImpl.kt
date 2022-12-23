@@ -1,5 +1,6 @@
 package com.project.meomi.domain.study.utils.impl
 
+import com.project.meomi.domain.comment.domain.repository.CommentRepository
 import com.project.meomi.domain.study.domain.Study
 import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component
 class StudyValidatorImpl(
     private val studyRepository: StudyRepository,
     private val studyPeopleRepository: StudyPeopleRepository,
+    private val commentRepository: CommentRepository,
     private val userUtil: UserUtil
 ): StudyValidator {
 
@@ -39,7 +41,7 @@ class StudyValidatorImpl(
 
     private fun validateCreateStudy(dto: StudyDto) {
         if (studyRepository.findStudyByDateAndStudyType(dto.date, "스터디").size >= 3) {
-            throw FullStudyTeamException()
+            throw CannotRentHomeBaselRentException()
         }
     }
 
@@ -58,8 +60,11 @@ class StudyValidatorImpl(
         studyRepository.findStudyById(dto.id)
             .let { it ?: throw StudyNotFountException() }
             .let {
-                if(!studyPeopleRepository.existsByStudyIdAndUserId(dto.id, userUtil.currentUser().id)) {
+                if (!studyPeopleRepository.existsByStudyIdAndUserId(dto.id, userUtil.currentUser().id)) {
                     throw ApplicantNotFountException()
+                }
+                if (studyPeopleRepository.findStudyPeopleByStudyId(it.id).size == 1) {
+                    commentRepository.deleteCommentByStudyId(it.id)
                 }
                 return it
             }

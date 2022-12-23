@@ -7,5 +7,6 @@ interface CommentRepository: CrudRepository<Comment, Long> {
 
     fun findCommentById(commentId: Long): Comment?
     fun findCommentByStudyId(studyId: Long): List<Comment>
+    fun deleteCommentByStudyId(studyId: Long)
 
 }
