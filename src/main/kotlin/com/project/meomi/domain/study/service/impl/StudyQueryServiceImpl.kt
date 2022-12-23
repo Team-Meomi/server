@@ -2,7 +2,8 @@ package com.project.meomi.domain.study.service.impl
 
 import com.project.meomi.domain.study.domain.repository.StudyPeopleRepository
 import com.project.meomi.domain.study.domain.repository.StudyRepository
-import com.project.meomi.domain.study.exception.FullStudyTeamException
+import com.project.meomi.domain.study.exception.CannotRentAudiovisualRentException
+import com.project.meomi.domain.study.exception.CannotRentHomeBaselRentException
 import com.project.meomi.domain.study.exception.StudyNotFountException
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyKeywordDto
@@ -23,16 +24,17 @@ class StudyQueryServiceImpl(
 ): StudyQueryService {
 
     @TransactionWithReadOnly
-    override fun checkAudiovisualIsRent(dto: StudyDto): Boolean {
-        return !studyRepository.existsByDateAndStudyType(dto.date, "컨퍼런스")
+    override fun checkAudiovisualIsRent(dto: StudyDto) {
+        if (studyRepository.existsByDateAndStudyType(dto.date, "컨퍼런스")) {
+            throw CannotRentAudiovisualRentException()
+        }
     }
 
     @TransactionWithReadOnly
-    override fun checkHomeBaseIsRent(dto: StudyDto): Boolean {
+    override fun checkHomeBaseIsRent(dto: StudyDto) {
         if (studyRepository.findStudyByDateAndStudyType(dto.date, "스터디").size >= 3) {
-            throw FullStudyTeamException()
+            throw CannotRentHomeBaselRentException()
         }
-        return true
     }
 
     @TransactionWithReadOnly

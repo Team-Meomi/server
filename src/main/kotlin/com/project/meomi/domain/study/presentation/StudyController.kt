@@ -56,15 +56,13 @@ class StudyController(
     fun checkHomeBaseIsRent(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: String): ResponseEntity<CheckStudyResponse> =
         studyConverter.toDto(date)
             .let { studyQueryService.checkHomeBaseIsRent(it) }
-            .let { studyQueryConverter.toResponse(it) }
-            .let { ResponseEntity.ok(it) }
+            .let { ResponseEntity.ok().build() }
 
     @PostMapping("audiovisual")
     fun checkAudiovisualIsRent(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: String): ResponseEntity<CheckStudyResponse> =
         studyConverter.toDto(date)
             .let { studyQueryService.checkAudiovisualIsRent(it) }
-            .let { studyQueryConverter.toResponse(it) }
-            .let { ResponseEntity.ok(it) }
+            .let { ResponseEntity.ok().build() }
 
     @PostMapping("{id}")
     fun joinStudy(@PathVariable id: Long): ResponseEntity<Void> =

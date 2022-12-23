@@ -23,7 +23,8 @@ enum class ErrorCode(
     FULL_STUDY_COUNT("스터디 최대 수용 인원을 초과했습니다.", 400),
     DUPLICATE_APPLICANT("중복된 신청자 입니다.", 409),
     APPLICANT_NOT_FOUNT("신청자를 찾을 수 없습니다.", 404),
-    FULL_STUDY_TEAM("홈베이스 최대 팀을 초과 했습니다.", 400),
+    CANNOT_RENT_HOMEBASE_RENT("홈베이스를 빌릴 수 없는 날짜 입니다.", 400),
+    CANNOT_RENT_AUDIOVISUAL_RENT("시청각실을 빌릴 수 없는 날짜 입니다.", 400),
 
 
     // COMMENT
