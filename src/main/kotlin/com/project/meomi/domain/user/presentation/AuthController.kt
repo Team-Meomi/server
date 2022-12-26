@@ -24,14 +24,12 @@ class AuthController(
     private val reissueTokenService: ReissueTokenService,
 ) {
 
-    @ApiOperation(value = "회원가입", notes = "사용자 초기 정보를 통해 회원가입을 진행합니다.")
     @PostMapping("/signup")
     fun signup(@RequestBody @Valid request: SignUpRequest): ResponseEntity<Void> =
         userConverter.toDto(request)
             .let { signUpService.signUp(it) }
             .let { ResponseEntity.status(HttpStatus.CREATED).build() }
 
-    @ApiOperation(value = "로그인", notes = "인증 정보(이메일, 패스워드)를 통해 로그인을 진행 후 성공시 토큰을 발급합니다.")
     @PostMapping("/signin")
     fun signin(@RequestBody @Valid request: SignInRequest): ResponseEntity<TokenResponse> =
         userConverter.toDto(request)
@@ -39,7 +37,6 @@ class AuthController(
             .let { userQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 
-    @ApiOperation(value = "토큰 재발급", notes = "refreshToken을 통해 토큰을 재발급합니다.")
     @PatchMapping
     fun reissue(@RequestHeader("RefreshToken") refreshToken: String): ResponseEntity<TokenResponse> =
         userConverter.toDto(refreshToken)
