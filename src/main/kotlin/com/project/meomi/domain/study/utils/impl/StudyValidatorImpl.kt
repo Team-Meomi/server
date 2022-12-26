@@ -35,7 +35,7 @@ class StudyValidatorImpl(
 
     private fun validateCreateConference(dto: StudyDto) {
         if (studyRepository.existsByDateAndStudyType(dto.date, "컨퍼런스")) {
-            throw DuplicateApplicantException()
+            throw CannotRentAudiovisualRentException()
         }
     }
 
