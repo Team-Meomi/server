@@ -6,8 +6,6 @@ import com.project.meomi.global.error.response.ErrorResponse
 import com.project.meomi.global.error.type.ErrorCode
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtException
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
