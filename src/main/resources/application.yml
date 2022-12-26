@@ -13,5 +13,8 @@ spring:
 
 jwt:
   secret:
-    key: ${JWT_KEY}
+      key: ${JWT_KEY}
+
+discord:
+  webhookURL: ${DISCORD_URL}
 
