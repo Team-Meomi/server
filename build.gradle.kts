@@ -36,6 +36,9 @@ dependencies {
 	// web
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
+	// json
+	implementation("com.googlecode.json-simple:json-simple:1.1.1")
+
 	// test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
