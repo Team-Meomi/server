@@ -22,5 +22,6 @@ interface StudyRepository : CrudRepository<Study, Long> {
     fun findStudyByTitleContainsOrderByCreateAtDesc(title: String): List<Study>
     fun findStudyByCategoryOrderByCreateAtDesc(category: String?): List<Study>
     fun findStudyByTitleContainsAndCategoryOrderByCreateAtDesc(title: String, category: String): List<Study>
+    fun findStudyByStudyTypeAndDate(studyType: String, date: LocalDate): Study
 
 }
