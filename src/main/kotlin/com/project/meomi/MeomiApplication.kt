@@ -12,10 +12,6 @@ import javax.annotation.PostConstruct
 @SpringBootApplication
 class MeomiApplication
 
-@PostConstruct
-fun timeZone() {
-	TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"))
-}
 fun main(args: Array<String>) {
 	runApplication<MeomiApplication>(*args)
 }
