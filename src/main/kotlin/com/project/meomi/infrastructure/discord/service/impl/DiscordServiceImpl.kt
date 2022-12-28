@@ -23,19 +23,21 @@ class DiscordServiceImpl(
     @TransactionWithReadOnly
     override fun reminderMorningTime() {
         val jsonObject = JSONObject()
-        val study = studyRepository.findStudyByStudyTypeAndDate("컨퍼런스", LocalDate.now())
-
-        jsonObject["content"] = "\uD83D\uDCE2" + study.date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")) + "\uD83D\uDCE2 \n [ " + study.title + " ] 컨퍼런스가 오늘 10, 11교시에 예정되어 있습니다."
-        sendDiscord(jsonObject)
+        studyRepository.findStudyByDateAndStudyType(LocalDate.now(), "컨퍼런스")
+            .map {
+                jsonObject["content"] = "\uD83D\uDCE2" + it.date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")) + "\uD83D\uDCE2 \n [ " + it.title + " ] 컨퍼런스가 오늘 10, 11교시에 예정되어 있습니다."
+                sendDiscord(jsonObject)
+            }
     }
 
     @TransactionWithReadOnly
     override fun reminderTenMinuteAgo() {
         val jsonObject = JSONObject()
-        val study = studyRepository.findStudyByStudyTypeAndDate("컨퍼런스", LocalDate.now())
-
-        jsonObject["content"] = "\uD83D\uDCE2" + study.date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")) + "\uD83D\uDCE2 \n [ " + study.title + " ] 컨퍼런스가 한시간 뒤에 예정되어 있습니다."
-        sendDiscord(jsonObject)
+        studyRepository.findStudyByDateAndStudyType(LocalDate.now(), "컨퍼런스")
+            .map {
+                jsonObject["content"] = "\uD83D\uDCE2" + it.date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")) + "\uD83D\uDCE2 \n [ " + it.title + " ] 컨퍼런스가 10분 뒤에 예정되어 있습니다. \n 슬슬 시청각실로 이동해주세요!"
+                sendDiscord(jsonObject)
+            }
     }
 
     private fun sendDiscord(jsonObject: JSONObject) {
@@ -45,5 +47,6 @@ class DiscordServiceImpl(
         val entity: HttpEntity<String> = HttpEntity(jsonObject.toString(), headers)
         restTemplate.postForObject(discordProperties.webhookURL, entity, String::class.java)
     }
+
 
 }
