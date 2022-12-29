@@ -1,5 +1,6 @@
 package com.project.meomi.global.security.jwt
 
+import com.project.meomi.domain.user.presentation.data.type.Role
 import com.project.meomi.global.security.authentication.AuthDetailsService
 import com.project.meomi.global.security.jwt.config.JwtProperties
 import io.jsonwebtoken.Claims
@@ -8,10 +9,14 @@ import org.springframework.stereotype.Component
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import java.security.Key
 import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.util.Date
+import java.util.Objects
+import java.util.stream.Collector
+import java.util.stream.Collectors
 
 @Component
 class JwtTokenProvider(
@@ -21,11 +26,6 @@ class JwtTokenProvider(
 
     private val accessTokenExpireTime = 1000 * 60 * 60 * 3L // 3시간
     private val refreshTokenExpireTime = 7 * 24 * 60 * 60 * 1000L // 1주
-
-    enum class TokenType(val value: String) {
-        ACCESS_TOKEN("accessToken"),
-        REFRESH_TOKEN("refreshToken")
-    }
 
     private fun getSignInKey(secretKey: String): Key {
         val bytes = secretKey.toByteArray(StandardCharsets.UTF_8)
@@ -53,24 +53,27 @@ class JwtTokenProvider(
 
     fun getExpiredAt(): LocalDateTime = LocalDateTime.now().plusSeconds(accessTokenExpireTime + 1000)
 
-    private fun doGenerateToken(email: String, tokenType: TokenType, expireTime: Long) =
+    private fun doGenerateToken(email: String, role: MutableList<Role>, expireTime: Long) =
         Jwts.builder()
             .setSubject(email)
-            .claim("tokenType", tokenType.value)
+            .claim("auth", role.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList())
+            )
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + expireTime))
             .signWith(getSignInKey(jwtProperties.key))
             .compact()
 
-    fun generateAccessToken(email: String): String =
-        doGenerateToken(email = email, tokenType = TokenType.ACCESS_TOKEN, expireTime = accessTokenExpireTime)
+    fun generateAccessToken(email: String, role: MutableList<Role>): String =
+        doGenerateToken(email = email, role = role, expireTime = accessTokenExpireTime)
 
-    fun generateRefreshToken(email: String): String =
-        doGenerateToken(email = email, tokenType = TokenType.REFRESH_TOKEN, expireTime = refreshTokenExpireTime)
+    fun generateRefreshToken(email: String, role: MutableList<Role>): String =
+        doGenerateToken(email = email, role = role, expireTime = refreshTokenExpireTime)
 
     fun authentication(token: String): Authentication {
         val userDetail = authDetailsService.loadUserByUsername(getUserEmail(token))
-        return UsernamePasswordAuthenticationToken(userDetail, "", null)
+        return UsernamePasswordAuthenticationToken(userDetail, "", userDetail.authorities)
     }
 
 }

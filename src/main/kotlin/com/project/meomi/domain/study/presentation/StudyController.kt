@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("api/v1/study/")
+@RequestMapping("api/v1/user/study/")
 class StudyController(
     private val studyService: StudyService,
     private val studyQueryService: StudyQueryService,

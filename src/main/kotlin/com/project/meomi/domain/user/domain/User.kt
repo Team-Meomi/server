@@ -1,5 +1,6 @@
 package com.project.meomi.domain.user.domain
 
+import com.project.meomi.domain.user.presentation.data.type.Role
 import javax.persistence.*
 
 @Entity
@@ -11,7 +12,11 @@ class User(
     val password: String,
     val name: String,
     val stuNum: Int,
-    var refreshToken: String
+    var refreshToken: String,
+    @Enumerated(EnumType.STRING)
+    @ElementCollection
+    @CollectionTable(name = "roles", joinColumns = [JoinColumn(name = "user_id")])
+    val role: MutableList<Role>
 ) {
     fun updateRefreshToken(refreshToken: String) {
         this.refreshToken = refreshToken

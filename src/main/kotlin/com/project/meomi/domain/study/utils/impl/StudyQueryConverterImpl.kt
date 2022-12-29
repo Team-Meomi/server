@@ -2,11 +2,11 @@ package com.project.meomi.domain.study.utils.impl
 
 import com.project.meomi.domain.study.domain.Study
 import com.project.meomi.domain.study.domain.StudyPeople
+import com.project.meomi.domain.study.presentation.data.dto.StudyPeopleQueryDto
+import com.project.meomi.domain.study.presentation.data.dto.StudyPeopleQueryListDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyQueryDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyQueryListDto
-import com.project.meomi.domain.study.presentation.data.response.CheckStudyResponse
-import com.project.meomi.domain.study.presentation.data.response.StudyListResponse
-import com.project.meomi.domain.study.presentation.data.response.StudyResponse
+import com.project.meomi.domain.study.presentation.data.response.*
 import com.project.meomi.domain.study.utils.StudyQueryConverter
 import org.springframework.stereotype.Component
 
@@ -38,6 +38,13 @@ class StudyQueryConverterImpl: StudyQueryConverter {
             }
         )
 
+    override fun toQueryDto(studyPeople: StudyPeople): StudyPeopleQueryDto =
+        StudyPeopleQueryDto(
+            id = studyPeople.user.id,
+            stuNum = studyPeople.user.stuNum,
+            name = studyPeople.user.name
+        )
+
     override fun toQueryListDto(study: Study): StudyQueryListDto =
         StudyQueryListDto(
             id = study.id,
@@ -46,6 +53,9 @@ class StudyQueryConverterImpl: StudyQueryConverter {
             date = study.date,
             studyType = study.studyType
         )
+
+    override fun toQueryListDto(dto: List<StudyPeopleQueryDto>): StudyPeopleQueryListDto =
+        StudyPeopleQueryListDto(list = dto)
 
     override fun toResponse(dto: StudyQueryDto): StudyResponse =
         StudyResponse(
@@ -65,7 +75,13 @@ class StudyQueryConverterImpl: StudyQueryConverter {
     override fun toResponse(isStatus: Boolean): CheckStudyResponse =
         CheckStudyResponse(isStatus = isStatus)
 
+    override fun toResponse(dto: List<List<StudyPeopleQueryDto>>): StudyPeopleListResponse =
+        StudyPeopleListResponse(dto)
+
     override fun toResponse(dto: List<StudyQueryListDto>): List<StudyListResponse> =
         dto.map { StudyListResponse(it.id, it.title, it.category, it.date, it.studyType) }
+
+    override fun toResponse(dto: List<StudyPeopleQueryDto>): StudyPeopleResponse =
+        StudyPeopleResponse(dto)
 
 }

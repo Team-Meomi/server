@@ -11,7 +11,7 @@ open class AuthDetails(
 ): UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return Collections.emptyList()
+        return user.role
     }
 
     override fun getPassword(): String {

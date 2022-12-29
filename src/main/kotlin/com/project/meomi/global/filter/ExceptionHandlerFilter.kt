@@ -27,7 +27,7 @@ class ExceptionHandlerFilter: OncePerRequestFilter() {
                 is ExpiredJwtException -> setErrorResponse(ErrorCode.EXPIRED_TOKEN, response)
                 is JwtException -> setErrorResponse(ErrorCode.INVALID_TOKEN, response)
                 is UserNotFoundException -> setErrorResponse(ErrorCode.USER_NOT_FOUND, response)
-                else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
+//                else -> setErrorResponse(ErrorCode.INTERVAL_SERVER_ERROR, response)
             }
         }
     }

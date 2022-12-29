@@ -56,17 +56,17 @@ class StudyQueryServiceImpl(
     @TransactionWithReadOnly
     override fun findStudyByKeyword(dto: StudyKeywordDto): List<StudyQueryListDto> {
 
-        if(dto.title != null && dto.category == "") {
+        if (dto.title != null && dto.category == "") {
             return studyRepository.findStudyByTitleContainsOrderByCreateAtDesc(dto.title)
-                .map{ studyQueryConverter.toQueryListDto(it) }
+                .map { studyQueryConverter.toQueryListDto(it) }
         }
 
-        if(dto.title == "" && dto.category != null) {
+        if (dto.title == "" && dto.category != null) {
             return studyRepository.findStudyByCategoryOrderByCreateAtDesc(dto.category)
-                .map{ studyQueryConverter.toQueryListDto(it) }
+                .map { studyQueryConverter.toQueryListDto(it) }
         }
 
-        if(dto.title != null && dto.category != null) {
+        if (dto.title != null && dto.category != null) {
             return studyRepository.findStudyByTitleContainsAndCategoryOrderByCreateAtDesc(dto.title, dto.category)
                 .map { studyQueryConverter.toQueryListDto(it) }
         }
