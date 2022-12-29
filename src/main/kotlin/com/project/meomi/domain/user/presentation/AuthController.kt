@@ -8,7 +8,6 @@ import com.project.meomi.domain.user.service.SignInService
 import com.project.meomi.domain.user.service.SignUpService
 import com.project.meomi.domain.user.utils.UserConverter
 import com.project.meomi.domain.user.utils.UserQueryConverter
-import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
