@@ -1,8 +1,8 @@
 package com.project.meomi.domain.comment.presentation.data.request
 
-import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 data class UpdateCommentRequest (
-    @field:NotBlank
+    @field:NotNull
     val comment: String
 )
