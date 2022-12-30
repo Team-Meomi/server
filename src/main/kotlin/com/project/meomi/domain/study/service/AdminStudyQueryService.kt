@@ -6,7 +6,7 @@ interface AdminStudyQueryService {
 
     fun findAudiovisualPeople(): List<StudyPeopleQueryDto>
     fun findHomebasePeople(): List<List<StudyPeopleQueryDto>>
-    fun searchAudiovisualPeople(): List<StudyPeopleQueryDto>
-    fun searchHomebasePeople(): List<StudyPeopleQueryDto>
+    fun searchAudiovisualPeople(stuNum: Int?, stuName: String?): List<StudyPeopleQueryDto>
+    fun searchHomebasePeople(stuNum: Int?, stuName: String?): List<StudyPeopleQueryDto>
 
 }

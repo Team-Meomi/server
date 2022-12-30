@@ -3,7 +3,7 @@ package com.project.meomi.domain.study.domain.repository
 import com.project.meomi.domain.study.domain.StudyPeople
 import org.springframework.data.repository.CrudRepository
 
-interface StudyPeopleRepository: CrudRepository<StudyPeople, Long> {
+interface StudyPeopleRepository: CrudRepository<StudyPeople, Long>, StudyPeopleRepositoryCustom {
 
     fun deleteStudyPeopleByStudyId(studyId: Long)
     fun findStudyPeopleByStudyId(studyId: Long): List<StudyPeople>

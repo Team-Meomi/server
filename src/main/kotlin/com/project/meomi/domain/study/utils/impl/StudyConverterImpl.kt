@@ -4,6 +4,7 @@ import com.project.meomi.domain.study.domain.Study
 import com.project.meomi.domain.study.domain.StudyPeople
 import com.project.meomi.domain.study.presentation.data.dto.StudyDto
 import com.project.meomi.domain.study.presentation.data.dto.StudyKeywordDto
+import com.project.meomi.domain.study.presentation.data.dto.StudyPeopleDto
 import com.project.meomi.domain.study.presentation.data.request.CreateStudyRequest
 import com.project.meomi.domain.study.presentation.data.request.UpdateStudyRequest
 import com.project.meomi.domain.study.utils.StudyConverter
@@ -38,6 +39,9 @@ class StudyConverterImpl: StudyConverter {
             studyType = ""
         )
 
+    override fun toDto(stuNum: Int?, stuName: String?): StudyPeopleDto =
+        StudyPeopleDto(stuNum = stuNum, stuName = stuName)
+
     override fun toDto(id: Long): StudyDto =
         StudyDto(
             id = id,
@@ -50,7 +54,7 @@ class StudyConverterImpl: StudyConverter {
             studyType = ""
         )
 
-    override fun toDto(date: String): StudyDto  =
+    override fun toDto(date: String): StudyDto =
         StudyDto(
             id = -1,
             title = "",

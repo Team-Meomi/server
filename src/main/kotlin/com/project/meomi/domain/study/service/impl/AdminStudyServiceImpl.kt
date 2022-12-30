@@ -32,13 +32,34 @@ class AdminStudyQueryServiceImpl(
             }
 
     @TransactionWithReadOnly
-    override fun searchAudiovisualPeople(): List<StudyPeopleQueryDto> {
-        TODO("Not yet implemented")
+    override fun searchAudiovisualPeople(stuNum: Int?, stuName: String?): List<StudyPeopleQueryDto> {
+        val conference = studyRepository.findStudyByDateAndStudyType(LocalDate.now(), "컨퍼런스")
+
+        // 학번을 안보냈을 경우
+        stuNum ?: return studyPeopleRepository.findStudyPeopleByStuName(stuName!!, conference[0].id)
+
+        // 이름을 안보냈을 경우
+        stuName ?: return studyPeopleRepository.findStudyPeopleByStuNum(stuNum, conference[0].id)
+
+        // 둘다 보냈을 경우
+        return studyPeopleRepository.findStudyPeopleByStuNumAndStuName(stuNum, stuName, conference[0].id)
     }
 
     @TransactionWithReadOnly
-    override fun searchHomebasePeople(): List<StudyPeopleQueryDto> {
-        TODO("Not yet implemented")
+    override fun searchHomebasePeople(stuNum: Int?, stuName: String?): List<StudyPeopleQueryDto> {
+        studyRepository.findStudyByDateAndStudyType(LocalDate.now(), "스터디")
+            .map {
+                // 학번을 안보냈을 경우
+                stuNum ?: return studyPeopleRepository.findStudyPeopleByStuName(stuName!!, it.id)
+
+                // 이름을 안보냈을 경우
+                stuName ?: return studyPeopleRepository.findStudyPeopleByStuNum(stuNum, it.id)
+
+                // 둘다 보냈을 경우
+                return studyPeopleRepository.findStudyPeopleByStuNumAndStuName(stuNum, stuName, it.id)
+            }
+
+        return emptyList()
     }
 
 }
