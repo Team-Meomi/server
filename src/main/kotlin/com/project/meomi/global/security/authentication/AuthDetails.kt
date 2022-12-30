@@ -3,7 +3,6 @@ package com.project.meomi.global.security.authentication
 import com.project.meomi.domain.user.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import java.util.Collections
 
 
 open class AuthDetails(
@@ -11,7 +10,7 @@ open class AuthDetails(
 ): UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return user.role
+        return user.roles
     }
 
     override fun getPassword(): String {

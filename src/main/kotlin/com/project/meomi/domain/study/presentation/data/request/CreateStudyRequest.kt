@@ -1,20 +1,19 @@
 package com.project.meomi.domain.study.presentation.data.request
 
 import java.time.LocalDate
-import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class CreateStudyRequest(
-    @field:NotBlank
+    @field:NotNull
     val title: String,
-    @field:NotBlank
+    @field:NotNull
     val content: String,
-    @field:NotBlank
+    @field:NotNull
     val category: String,
-    @field:NotBlank
+    @field:NotNull
     val date: LocalDate,
-    @field:NotBlank
+    @field:NotNull
     val maxCount: Int,
-    @field:NotBlank
+    @field:NotNull
     val studyType: String
 )

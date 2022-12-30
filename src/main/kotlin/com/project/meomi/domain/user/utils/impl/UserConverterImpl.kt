@@ -26,6 +26,6 @@ class UserConverterImpl : UserConverter {
         UserDto(id = id, email = "", password = "", name = "", stuNum = -1)
 
     override fun toEntity(dto: UserDto, encodePassword: String): User =
-        User(id = -1, email = dto.email, password = encodePassword, name = dto.name, stuNum = dto.stuNum, refreshToken = "", role = Collections.singletonList(Role.USER))
+        User(id = -1, email = dto.email, password = encodePassword, name = dto.name, stuNum = dto.stuNum, refreshToken = "", roles = Collections.singletonList(Role.ROLE_USER))
 
 }

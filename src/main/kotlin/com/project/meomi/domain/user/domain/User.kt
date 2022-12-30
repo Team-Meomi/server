@@ -16,7 +16,7 @@ class User(
     @Enumerated(EnumType.STRING)
     @ElementCollection
     @CollectionTable(name = "roles", joinColumns = [JoinColumn(name = "user_id")])
-    val role: MutableList<Role>
+    val roles: MutableList<Role>
 ) {
     fun updateRefreshToken(refreshToken: String) {
         this.refreshToken = refreshToken

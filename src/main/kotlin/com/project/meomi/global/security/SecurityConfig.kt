@@ -37,10 +37,8 @@ class SecurityConfig(
             .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
             .antMatchers(HttpMethod.PATCH, "/api/v1/auth/**").permitAll()
 
-            .antMatchers(HttpMethod.POST, "/api/v1/user/conference/**").authenticated()
-            .antMatchers(HttpMethod.GET, "/api/v1/user/conference/**").authenticated()
-            .antMatchers(HttpMethod.DELETE, "/api/v1/user/conference/**").authenticated()
-            .antMatchers(HttpMethod.PATCH, "/api/v1/user/conference/**").authenticated()
+//            .antMatchers("/api/v1/user/**").hasRole("USER")
+//            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
             .antMatchers(HttpMethod.POST, "/api/v1/user/study/**").authenticated()
             .antMatchers(HttpMethod.GET, "/api/v1/user/study/**").authenticated()
@@ -55,9 +53,6 @@ class SecurityConfig(
             .antMatchers(HttpMethod.GET, "/api/v1/user/**").authenticated()
 
             .antMatchers(HttpMethod.GET, "/api/v1/admin/**").authenticated()
-
-            .antMatchers("/api/v1/user/**").hasRole("USER")
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
             .anyRequest().authenticated()
 

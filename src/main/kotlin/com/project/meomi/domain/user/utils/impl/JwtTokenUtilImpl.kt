@@ -18,8 +18,8 @@ class JwtTokenUtilImpl(
     override fun generateJwtToken(email: String): TokenDto {
         val user = userRepository.findUserByEmail(email)
             ?: throw UserNotFoundException()
-        val accessToken = jwtTokenProvider.generateAccessToken(email, user.role)
-        val refreshToken = jwtTokenProvider.generateRefreshToken(email, user.role)
+        val accessToken = jwtTokenProvider.generateAccessToken(email, user.roles)
+        val refreshToken = jwtTokenProvider.generateRefreshToken(email, user.roles)
         user.updateRefreshToken(refreshToken)
         return TokenDto(accessToken, refreshToken, jwtTokenProvider.getExpiredAt())
     }

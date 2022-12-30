@@ -5,17 +5,15 @@ import com.project.meomi.global.security.authentication.AuthDetailsService
 import com.project.meomi.global.security.jwt.config.JwtProperties
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import org.springframework.stereotype.Component
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
-import java.security.Key
+import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
+import java.security.Key
 import java.time.LocalDateTime
-import java.util.Date
-import java.util.Objects
-import java.util.stream.Collector
+import java.util.*
 import java.util.stream.Collectors
 
 @Component
@@ -71,9 +69,7 @@ class JwtTokenProvider(
     fun generateRefreshToken(email: String, role: MutableList<Role>): String =
         doGenerateToken(email = email, role = role, expireTime = refreshTokenExpireTime)
 
-    fun authentication(token: String): Authentication {
-        val userDetail = authDetailsService.loadUserByUsername(getUserEmail(token))
-        return UsernamePasswordAuthenticationToken(userDetail, "", userDetail.authorities)
-    }
+    fun authentication(token: String): Authentication =
+        UsernamePasswordAuthenticationToken(authDetailsService.loadUserByUsername(getUserEmail(token)), "", null)
 
 }
