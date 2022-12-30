@@ -25,6 +25,7 @@ enum class ErrorCode(
     APPLICANT_NOT_FOUNT("신청자를 찾을 수 없습니다.", 404),
     CANNOT_RENT_HOMEBASE_RENT("홈베이스를 빌릴 수 없는 날짜 입니다.", 400),
     CANNOT_RENT_AUDIOVISUAL_RENT("시청각실을 빌릴 수 없는 날짜 입니다.", 400),
+    DUPLICATE_STUDY_DATE("이미 같은날에 컨퍼런스 혹은 스터디가 있습니다.", 409),
 
 
     // COMMENT
