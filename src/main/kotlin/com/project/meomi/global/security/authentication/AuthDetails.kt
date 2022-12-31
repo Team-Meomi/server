@@ -7,34 +7,20 @@ import org.springframework.security.core.userdetails.UserDetails
 
 open class AuthDetails(
     val user: User
-): UserDetails {
+) : UserDetails {
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return user.roles
-    }
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = user.roles
 
-    override fun getPassword(): String {
-        return user.password
-    }
+    override fun getPassword(): String = user.password
 
-    override fun getUsername(): String {
-        return user.email
-    }
+    override fun getUsername(): String = user.email
 
-    override fun isAccountNonExpired(): Boolean {
-        return false
-    }
+    override fun isAccountNonExpired(): Boolean = false
 
-    override fun isAccountNonLocked(): Boolean {
-        return false
-    }
+    override fun isAccountNonLocked(): Boolean = false
 
-    override fun isCredentialsNonExpired(): Boolean {
-        return false
-    }
+    override fun isCredentialsNonExpired(): Boolean = false
 
-    override fun isEnabled(): Boolean {
-        return false
-    }
+    override fun isEnabled(): Boolean = false
 
 }
