@@ -34,14 +34,14 @@ class AdminStudyController(
     @GetMapping("audiovisual/search")
     fun searchAudiovisualPeople(@RequestParam stuNum: Int?, @RequestParam stuName: String?): ResponseEntity<StudyPeopleResponse> =
         studyConverter.toDto(stuNum, stuName)
-            .let { adminStudyQueryService.searchAudiovisualPeople(stuNum, stuName) }
+            .let { adminStudyQueryService.searchAudiovisualPeople(it) }
             .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 
     @GetMapping("homebase/search")
-    fun searchHomebasePeople(@RequestParam stuNum: Int?, @RequestParam stuName: String?): ResponseEntity<StudyPeopleResponse> =
+    fun searchHomebasePeople(@RequestParam(required = false) stuNum: Int?, @RequestParam(required = false) stuName: String?): ResponseEntity<StudyPeopleListResponse> =
         studyConverter.toDto(stuNum, stuName)
-            .let { adminStudyQueryService.searchHomebasePeople(stuNum, stuName) }
+            .let { adminStudyQueryService.searchHomebasePeople(it) }
             .let { studyQueryConverter.toResponse(it) }
             .let { ResponseEntity.ok(it) }
 
