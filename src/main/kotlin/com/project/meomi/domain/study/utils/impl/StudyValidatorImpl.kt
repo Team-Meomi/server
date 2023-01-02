@@ -11,7 +11,6 @@ import com.project.meomi.domain.study.presentation.data.type.CreateValidatorType
 import com.project.meomi.domain.study.utils.StudyValidator
 import com.project.meomi.domain.user.utils.UserUtil
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 @Component
 class StudyValidatorImpl(
@@ -50,7 +49,7 @@ class StudyValidatorImpl(
         studyRepository.findStudyById(dto.id)
             .let { it ?: throw StudyNotFountException() }
             .let {
-                existDuplicateStudy()
+                existDuplicateStudy(it)
                 isSmallerThanMaxCount(it.count, it.maxCount)
                 if (studyPeopleRepository.existsByStudyIdAndUserId(dto.id, userUtil.currentUser().id)) {
                     throw DuplicateApplicantException()
@@ -76,8 +75,8 @@ class StudyValidatorImpl(
         return true
     }
 
-    private fun existDuplicateStudy() {
-        if(studyPeopleRepository.existsStudyPeopleByUserIdAndStudyDate(userUtil.currentUser().id, LocalDate.now())) {
+    private fun existDuplicateStudy(study: Study) {
+        if(studyPeopleRepository.existsStudyPeopleByUserIdAndStudyDate(userUtil.currentUser().id, study.date)) {
             throw DuplicateStudyDateException()
         }
     }
