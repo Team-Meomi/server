@@ -4,7 +4,9 @@ import com.project.meomi.domain.study.domain.QStudyPeople.studyPeople
 import com.project.meomi.domain.study.presentation.data.dto.StudyPeopleQueryDto
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
 
+@Repository
 class StudyPeopleRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ): StudyPeopleRepositoryCustom {
