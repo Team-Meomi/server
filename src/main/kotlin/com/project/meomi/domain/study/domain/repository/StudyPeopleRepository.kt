@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 interface StudyPeopleRepository: CrudRepository<StudyPeople, Long>, StudyPeopleRepositoryCustom {
 
-    fun deleteStudyPeopleByStudyId(studyId: Long)
+    fun deleteStudyPeopleByStudyIdAndUserId(studyId: Long, userId: Long)
     fun findStudyPeopleByStudyId(studyId: Long): List<StudyPeople>
     fun existsByStudyIdAndUserId(studyId: Long, userId: Long): Boolean
     fun existsStudyPeopleByUserIdAndStudyDate(userId: Long, date: LocalDate): Boolean

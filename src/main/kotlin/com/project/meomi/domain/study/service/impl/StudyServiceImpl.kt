@@ -40,7 +40,7 @@ class StudyServiceImpl(
         studyValidator.applicantValidate(ApplicantValidatorType.CANCEL, dto)
             .let {
                 it.removeCount()
-                studyPeopleRepository.deleteStudyPeopleByStudyId(it.id)
+                studyPeopleRepository.deleteStudyPeopleByStudyIdAndUserId(it.id, userUtil.currentUser().id)
             }
     }
 
